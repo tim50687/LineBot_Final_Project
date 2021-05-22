@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-097ht#4s1zhe5i5bo#-xc^y52h_tp&vqvzu@lfp+srkn3rg14^
 LINE_CHANNEL_ACCESS_TOKEN = 'qcqxDK5+eZUgMkFnGpAXKnXA4IbpECBO2UST11a331RnekdcKNJOVqvRVVZek9Rmtfpa0CmFuw7uYFS1h5wv80krU2GtQD6B23k7yyoljqQS10xf8xO4r1tgBzGBPyrsWIa88BKiDAubQH27tPSAsAdB04t89/1O/w1cDnyilFU='
 LINE_CHANNEL_SECRET  = 'c5fde54065f6ca1bd2a308464828760a'
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
