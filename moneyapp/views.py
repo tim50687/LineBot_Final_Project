@@ -4,13 +4,14 @@ from django.views.decorators.csrf import csrf_exempt
 
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
-from linebot.models import MessageEvent, TextMessage
+from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from module import func
 from urllib.parse import parse_qsl
-
+import json
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
-
+registered_data = {}
+data = {}
 
 @csrf_exempt
 def callback(request):
@@ -23,14 +24,50 @@ def callback(request):
             return HttpResponseForbidden()
         except LineBotApiError:
             return HttpResponseBadRequest()
+        oplist = ["飲食", "娛樂", "交通", "學業", "生活用品"]
+        eslist = ["必要", "不必要"]
+
 
         for event in events:
             if isinstance(event, MessageEvent):
                 if isinstance(event.message, TextMessage):
                     mtext = event.message.text
-                    if mtext == '文字':
-                        func.sendText(event)
+                    uid = event.source.user_id
+                    time = event.timestamp
+                    rep = event.reply_token
+                    if mtext == '記帳':
+                        func.sendQuickreply(event)
+                    elif mtext in oplist:
+                        func.sendQuickreply2(event)
+                        with open('registered_data.json', 'r', encoding="utf-8") as f:
+                            registered_data = json.load(f)
+                        registered_data[uid] = {"項目":[], "必要":[], "金額":[], "時間":[]}
+                        registered_data[uid]["項目"] = mtext
+                        with open('registered_data.json', 'w', encoding="utf-8") as f:
+                            json.dump(registered_data, f, ensure_ascii=False)
 
+                    elif mtext in eslist:
+                        func.sendText(event)
+                        with open('registered_data.json', 'r', encoding="utf-8") as f:
+                            registered_data = json.load(f)
+                        registered_data[uid]["必要"] = mtext
+                        with open('registered_data.json', 'w', encoding="utf-8") as f:
+                            json.dump(registered_data, f, ensure_ascii=False)
+
+                    elif str.isdigit(mtext) == True:
+                        with open('registered_data.json', 'r', encoding="utf-8") as f:
+                            registered_data = json.load(f)
+                        registered_data[uid]["金額"] = mtext
+                        registered_data[uid]["時間"] = str(time)
+                        with open('registered_data.json', 'w', encoding="utf-8") as f:
+                            json.dump(registered_data, f, ensure_ascii=False)
+                        with open('registered_data.json', 'r', encoding="utf-8") as f:
+                            registered_data = json.load(f)
+                        response = uid + "/" + registered_data[uid]["項目"] + "/" + registered_data[uid]["必要"] + "/" + registered_data[uid]["金額"]
+                        data[time] = response
+                        with open('data.json', 'w', encoding="utf-8") as f:
+                            json.dump(data, f, ensure_ascii=False)
+                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="記帳成功"))
                     elif mtext == '圖片':
                         func.sendImage(event)
 
@@ -43,8 +80,7 @@ def callback(request):
                     elif mtext == '位置':
                         func.sendPosition(event)
 
-                    elif mtext == '快速回覆':
-                        func.sendQuickreply(event)
+
 
                     elif mtext == '聲音':
                         func.sendVoice(event)
@@ -83,3 +119,5 @@ def callback(request):
 #        func.sendBack_buy(event, backdata)
 #    elif backdata.get('action') == 'sell':
 #        func.sendBack_sell(event, backdata)
+
+

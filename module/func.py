@@ -23,13 +23,13 @@ from linebot.models import (
     ImageCarouselColumn
 )
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
-baseurl = 'https://3ffde72121fb.ngrok.io/static/'
+baseurl = 'https://moneylinebot.herokuapp.com/static/'
 
 
 def sendText(event):  #傳送文字
     try:
         message = TextSendMessage(
-            text = "我是 泡麵，\n您好！"
+            text = "請輸入金額"
         )
         line_bot_api.reply_message(event.reply_token, message)
     except:
@@ -111,6 +111,26 @@ def sendQuickreply(event):  #快速選單
                     ),
                     QuickReplyButton(
                         action=MessageAction(label="生活用品", text="生活用品")
+                    )
+                ]
+            )
+        )
+        line_bot_api.reply_message(event.reply_token, message)
+    except:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
+
+
+def sendQuickreply2(event):  #快速選單
+    try:
+        message = TextSendMessage(
+            text='請選擇必要或不必要',
+            quick_reply=QuickReply(
+                items=[
+                    QuickReplyButton(
+                        action=MessageAction(label="必要", text="必要")
+                    ),
+                    QuickReplyButton(
+                        action=MessageAction(label="不必要", text="不必要")
                     )
                 ]
             )
