@@ -8,7 +8,6 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from module import func
 from urllib.parse import parse_qsl
 import json
-
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials as SAC
 Json = 'finalproject-314617-e6520a57a6fc.json' # Json 的單引號內容請改成妳剛剛下載的那個金鑰
