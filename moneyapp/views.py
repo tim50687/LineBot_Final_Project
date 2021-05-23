@@ -8,7 +8,7 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from module import func
 from urllib.parse import parse_qsl
 import json
-import time
+
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials as SAC
 Json = 'finalproject-314617-e6520a57a6fc.json' # Json 的單引號內容請改成妳剛剛下載的那個金鑰
@@ -17,7 +17,6 @@ Connect = SAC.from_json_keyfile_name(Json, Url)
 GoogleSheets = gspread.authorize(Connect)
 Sheet = GoogleSheets.open_by_key('1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY') # 這裡請輸入妳自己的試算表代號
 Sheets = Sheet.sheet1
-
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 registered_data = {}
@@ -43,10 +42,15 @@ def callback(request):
                 if isinstance(event.message, TextMessage):
                     mtext = event.message.text
                     uid = event.source.user_id
-                    time = event.timestamp
+                    timer = event.timestamp
+                    import time
+                    time_stamp = int(str(timer)[:10])
+                    struct_time = time.localtime(time_stamp)  # 轉成時間元組
+                    timeString = time.strftime("%Y-%m-%d %H:%M:%S", struct_time)  # 轉成字串
                     rep = event.reply_token
                     if mtext == '記帳':
                         func.sendQuickreply(event)
+
                     elif mtext in oplist:
                         func.sendQuickreply2(event)
                         with open('registered_data.json', 'r', encoding="utf-8") as f:
@@ -73,42 +77,10 @@ def callback(request):
                             json.dump(registered_data, f, ensure_ascii=False)
                         with open('registered_data.json', 'r', encoding="utf-8") as f:
                             registered_data = json.load(f)
-                        response = uid + "/" + registered_data[uid]["項目"] + "/" + registered_data[uid]["必要"] + "/" + registered_data[uid]["金額"]
-                        data[time] = response
-                        with open('data.json', 'w', encoding="utf-8") as f:
-                            json.dump(data, f, ensure_ascii=False)
-                        with open('data.json', 'r', encoding="utf-8") as f:
-                            data = json.load(f)
 
-                        a = []
-                        for key in data.keys():
-                            a.append(int(key[:10]))
 
-                        i = 0
-                        c = []
-                        while i < len(a):
-                            struct_time = time.localtime(a[i])  # 轉成時間元組
-                            timeString = time.strftime("%Y-%m-%d %H:%M:%S", struct_time)  # 轉成字串
-                            c.append([timeString, ])
-                            i = i + 1
-
-                        b = []
-                        for value in data.values():
-                            b.append(value)
-                        i = 0
-                        while i < len(b):
-                            b[i] = b[i].split("/")
-                            i = i + 1
-                        itemlist = []
-                        i = 0
-                        while i < len(b):
-                            itemlist.append(b[i] + c[i])
-                            i = i + 1
-                        i = 0
-                        while i < len(itemlist):
-                            datas = itemlist[i]
-                            Sheets.append_row(datas)
-                            i = i + 1
+                        response = [uid, registered_data[uid]["項目"], registered_data[uid]["必要"],  registered_data[uid]["金額"], timeString]
+                        Sheets.append_row(response)
                         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="記帳成功"))
                     elif mtext == '圖片':
                         func.sendImage(event)
@@ -153,6 +125,7 @@ def callback(request):
 
     else:
         return HttpResponseBadRequest()
+
 
 
 #if isinstance(event, PostbackEvent):  # PostbackTemplateAction觸發此事件
