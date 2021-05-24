@@ -19,6 +19,8 @@ Sheets = Sheet.sheet1
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 registered_data = {}
+with open('registered_data.json', 'w', encoding="utf-8") as f:
+    json.dump(registered_data, f, ensure_ascii=False)
 data = {}
 
 @csrf_exempt
