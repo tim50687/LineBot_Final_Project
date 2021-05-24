@@ -14,8 +14,8 @@ Json = 'finalproject-314617-e6520a57a6fc.json' # Json 的單引號內容請改�
 Url = ['https://spreadsheets.google.com/feeds']
 Connect = SAC.from_json_keyfile_name(Json, Url)
 GoogleSheets = gspread.authorize(Connect)
-Sheet = GoogleSheets.open_by_key('1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY') # 這裡請輸入妳自己的試算表代號
-Sheets = Sheet.sheet1
+
+
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
 registered_data = {}
@@ -48,8 +48,19 @@ def callback(request):
                     time_stamp = int(str(timer)[:10])
                     struct_time = time.localtime(time_stamp)  # 轉成時間元組
                     timeString = time.strftime("%Y-%m-%d %H:%M:%S", struct_time)  # 轉成字串
-                    rep = event.reply_token
-                    if mtext == '記帳':
+
+                    if mtext == '記收入':
+                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請輸入:我有XX元\nex:我有6000元"))
+
+                    elif mtext[:2]=="我有" and mtext[-1]=="元"  :
+                        money = mtext[mtext.find("有")+1:mtext.find("元")]
+                        response = [uid, money, timeString]
+                        Sheet = GoogleSheets.open_by_key('1OGn7xzKwI8xySKstNWhpnqglK3AzooVPT11MCBAOGH4')
+                        Sheets = Sheet.sheet1
+                        Sheets.append_row(response)
+                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="紀錄成功"))
+
+                    elif mtext == '記支出':
                         func.sendQuickreply(event)
 
                     elif mtext in oplist:
@@ -62,7 +73,7 @@ def callback(request):
                             json.dump(registered_data, f, ensure_ascii=False)
 
                     elif mtext in eslist:
-                        func.sendText(event)
+                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請輸入金額(純數字)"))
                         with open('registered_data.json', 'r', encoding="utf-8") as f:
                             registered_data = json.load(f)
                         registered_data[uid]["必要"] = mtext
@@ -81,6 +92,8 @@ def callback(request):
 
 
                         response = [uid, registered_data[uid]["項目"], registered_data[uid]["必要"],  registered_data[uid]["金額"], timeString]
+                        Sheet = GoogleSheets.open_by_key('1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY')
+                        Sheets = Sheet.sheet1
                         Sheets.append_row(response)
                         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="記帳成功"))
                     elif mtext == '圖片':
