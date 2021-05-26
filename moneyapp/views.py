@@ -5,13 +5,11 @@ from django.views.decorators.csrf import csrf_exempt
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
-from module import func, func2, line_chatbot_2
+from module import func
 from urllib.parse import parse_qsl
 import json
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials as SAC
-import csv, urllib.request
-from apscheduler.schedulers.blocking import BlockingScheduler
 
 Json = 'finalproject-314617-e6520a57a6fc.json'    # Json 的單引號內容請改成妳剛剛下載的那個金鑰
 Url = ['https://spreadsheets.google.com/feeds']
@@ -27,29 +25,6 @@ with open('registered_data.json', 'w', encoding="utf-8") as f:
 data = {}
 
 
-def job_function(user_data_dict):
-    for key, value in user_data_dict.items():
-        if value >= 2:
-            print(key)
-            msg = line_chatbot_2.linebot_push_message(user_id=key)
-            print(msg)
-
-import time
-nowtime = time.localtime()
-year, month, day = nowtime.tm_year, nowtime.tm_mon, nowtime.tm_mday
-nowtime_str = time.strftime("%Y-%m-%d %H:%M:%S", nowtime)
-
-url = "https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv"
-webpage = urllib.request.urlopen(url)
-data2 = csv.DictReader(webpage.read().decode('utf-8-sig').splitlines())
-from dateutil import parser
-user_data_dict = dict()
-for i in data2:
-    user_data_dict[i["userid"]] = (parser.parse(nowtime_str) - parser.parse(i["時間"][0:10])).days
-
-sched = BlockingScheduler()
-sched.add_job(job_function, 'cron', month=str(month), day=str(day), hour='12,18,23', minute="0", args=[user_data_dict])
-sched.start()
 
 
 
