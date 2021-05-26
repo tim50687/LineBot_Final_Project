@@ -1,5 +1,5 @@
 import urllib.request, csv
-import pandas
+
 
 url = 'https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv'      # 下載連結
 webpage = urllib.request.urlopen(url)  # 開啟網頁
@@ -57,16 +57,7 @@ def day_cost(userid, types):
 # print(day_cost("U0a84d6de855ff90af62127932c7fde1f", "0524"))
 
 
-# 找出所有userid
-def all_userid():
-    i = 0
-    b = []
-    while i < len(a):
-        b.append(a[i][0])
-        i = i + 1
-    b = pandas.unique(b).tolist()
-    return b
-# print(all_userid()[1])
+
 
 
 
