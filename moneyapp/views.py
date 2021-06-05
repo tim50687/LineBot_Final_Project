@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
-
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
@@ -17,6 +16,7 @@ import bs4
 import re
 import pandas as pd
 import pyimgur
+import os
 Json = 'finalproject-314617-e6520a57a6fc.json'    # Json 的單引號內容剛剛下載的那個金鑰
 Url = ['https://spreadsheets.google.com/feeds']
 Connect = SAC.from_json_keyfile_name(Json, Url)
