@@ -1,5 +1,6 @@
 from django.conf import settings
-
+import csv
+import re
 from linebot import LineBotApi
 from linebot.models import (
     TextSendMessage,
@@ -29,6 +30,10 @@ baseurl = 'https://moneylinebot.herokuapp.com/static/'
 
 
 
+
+
+
+
 def sendText(event):  # 傳送文字
     try:
         message = TextSendMessage(
@@ -39,11 +44,11 @@ def sendText(event):  # 傳送文字
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
 
 
-def sendImage(event):  # 傳送圖片
+def sendImage(imgururl, event):  # 傳送圖片
     try:
         message = ImageSendMessage(
-            original_content_url="https://i.imgur.com/itLXczv.jpeg",
-            preview_image_url="https://i.imgur.com/itLXczv.jpeg"
+            original_content_url=imgururl,
+            preview_image_url=imgururl
         )
         line_bot_api.reply_message(event.reply_token, message)
     except:
@@ -217,57 +222,135 @@ def sendConfirm(event):  # 確認樣板
     except:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
 
-
-def sendCarousel(event):  # 轉盤樣板
+def sendCarousel(event):  #轉盤樣板
     try:
+        with open('commondata.csv', newline='', encoding='utf-8') as csvfile:
+            rows = csv.reader(csvfile)
+            a = [[i[0], i[1], i[2], i[3], i[4]] for i in rows]
+        i = 0
+        while i < len(a):
+            a[i][0] = re.sub(u"([^\u4e00-\u9fa5\u0030-\u0039\u0041-\u005a\u0061-\u007a])", "", a[i][0])
+            i = i + 1
         message = TemplateSendMessage(
             alt_text='轉盤樣板',
             template=CarouselTemplate(
                 columns=[
                     CarouselColumn(
-                        thumbnail_image_url='https://i.imgur.com/4zSAWJ5.jpg',
-                        title='這是樣板一',
-                        text='第一個轉盤樣板',
+                        thumbnail_image_url=a[1][4],
+                        title=a[1][0][:35],
+                        text=a[1][1]+"元",
                         actions=[
-                            MessageTemplateAction(
-                                label='文字訊息一',
-                                text='文字1'
-                            ),
                             URITemplateAction(
-                                label='連結網頁',
-                                uri='https://www.youtube.com/watch?v=072tU1tamd0'
-                            ),
-                            PostbackTemplateAction(
-                                label='回傳訊息一',
-                                data='action=sell&item='
-                            ),
+                                label='商品連結',
+                                uri=a[1][3]
+                            )
                         ]
                     ),
                     CarouselColumn(
-                        thumbnail_image_url='https://i.imgur.com/0jpI8le.jpg',
-                        title='這是樣板二',
-                        text='第二個轉盤樣板',
+                        thumbnail_image_url=a[2][4],
+                        title=a[2][0][:35],
+                        text=a[2][1]+"元",
                         actions=[
-                            MessageTemplateAction(
-                                label='文字訊息二',
-                                text='文字2'
-                            ),
                             URITemplateAction(
-                                label='連結網頁',
-                                uri='https://www.youtube.com/watch?v=072tU1tamd0'
-                            ),
-                            PostbackTemplateAction(
-                                label='回傳訊息二',
-                                data='action=sell&item=文字2'
-                            ),
+                                label='商品連結',
+                                uri=a[2][3]
+                            )
+                        ]
+                    ),
+                    CarouselColumn(
+                        thumbnail_image_url=a[3][4],
+                        title=a[3][0][:35],
+                        text=a[3][1]+"元",
+                        actions=[
+                            URITemplateAction(
+                                label='商品連結',
+                                uri=a[3][3]
+                            )
+                        ]
+                    ),
+                    CarouselColumn(
+                        thumbnail_image_url=a[4][4],
+                        title=a[4][0][:35],
+                        text=a[4][1]+"元",
+                        actions=[
+                            URITemplateAction(
+                                label='商品連結',
+                                uri=a[4][3]
+                            )
+                        ]
+                    ),
+                    CarouselColumn(
+                        thumbnail_image_url=a[5][4],
+                        title=a[5][0][:35],
+                        text=a[5][1]+"元",
+                        actions=[
+                            URITemplateAction(
+                                label='商品連結',
+                                uri=a[5][3]
+                            )
+                        ]
+                    ),
+                    CarouselColumn(
+                        thumbnail_image_url=a[6][4],
+                        title=a[6][0][:35],
+                        text=a[6][1]+"元",
+                        actions=[
+                            URITemplateAction(
+                                label='商品連結',
+                                uri=a[6][3]
+                            )
+                        ]
+                    ),
+                    CarouselColumn(
+                        thumbnail_image_url=a[7][4],
+                        title=a[7][0][:35],
+                        text=a[7][1]+"元",
+                        actions=[
+                            URITemplateAction(
+                                label='商品連結',
+                                uri=a[7][3]
+                            )
+                        ]
+                    ),
+                    CarouselColumn(
+                        thumbnail_image_url=a[8][4],
+                        title=a[8][0][:35],
+                        text=a[8][1]+"元",
+                        actions=[
+                            URITemplateAction(
+                                label='商品連結',
+                                uri=a[8][3]
+                            )
+                        ]
+                    ),
+                    CarouselColumn(
+                        thumbnail_image_url=a[9][4],
+                        title=a[9][0][:35],
+                        text=a[9][1]+"元",
+                        actions=[
+                            URITemplateAction(
+                                label='商品連結',
+                                uri=a[9][3]
+                            )
+                        ]
+                    ),
+                    CarouselColumn(
+                        thumbnail_image_url=a[10][4],
+                        title=a[10][0][:35],
+                        text=a[10][1]+"元",
+                        actions=[
+                            URITemplateAction(
+                                label='商品連結',
+                                uri=a[10][3]
+                            )
                         ]
                     )
                 ]
             )
         )
-        line_bot_api.reply_message(event.reply_token, message)
+        line_bot_api.reply_message(event.reply_token,message)
     except:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
+        line_bot_api.reply_message(event.reply_token,TextSendMessage(text='發生錯誤！'))
 
 
 def sendImgCarousel(event):  # 圖片轉盤
