@@ -148,7 +148,7 @@ def callback(request):
 
                         url = 'https://feebee.com.tw/'
                         #driver = webdriver.Chrome('D:/Download/chromedriver_win32 (1)/chromedriver.exe')
-                        driver = webdriver.Chrome('chromedriver.exe')
+                        #driver = webdriver.Chrome('chromedriver.exe')
                         driver.get(url)
 
                         def url_pagesource(text):
