@@ -291,6 +291,9 @@ def sendQuickreply4(event):  # 快速選單
                         action=MessageAction(label="這個月剩多少錢能花", text="這個月剩多少錢能花")
                     ),
                     QuickReplyButton(
+                        action=MessageAction(label="消費分析", text="消費分析")
+                    ),
+                    QuickReplyButton(
                         action=MessageAction(label="查詢上一筆花費紀錄", text="查詢上一筆花費")
                     ),
                     QuickReplyButton(

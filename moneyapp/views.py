@@ -250,7 +250,7 @@ def callback(request):
                         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="補記成功"))
 
                     elif mtext == '這個月剩多少錢能花':
-                        r = func2.average(uid,func2.get_today_date()[:6])
+                        r = func2.average(uid, func2.get_today_date()[:6])
                         func.sendMulti(event, r)
 
                     elif mtext == '位置':
@@ -485,7 +485,7 @@ def callback(request):
                         func.sendCarousel(event)
 
                     elif mtext == '消費分析':
-                        string = func2get_today_date()
+                        string = func2.get_today_date()
                         year = string[:4]  # 年
                         month = string[4:6]  # 月
                         eatcost = func2.item_cost(uid, "飲食", year+month)
