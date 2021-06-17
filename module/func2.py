@@ -9,6 +9,10 @@ a = [[i["userid"], i["項目"], i["必要嗎"], i["金額"], i["時間"]]for i i
 #print(a)
 
 def total_cost(userid):
+    url = 'https://docs.google.com/spreadsheets/d/19OiyE1Pqp44BTDD9cXtpebntvuQHmPYRTLDy_OJCi2c/export?format=csv'  # 下載連結
+    webpage = urllib.request.urlopen(url)  # 開啟網頁
+    data = csv.DictReader(webpage.read().decode('utf-8-sig').splitlines())  # 讀取資料到data陣列中
+    a = [[i["userid"], i["項目"], i["必要嗎"], i["金額"], i["時間"]] for i in data]
     i = 0
     b = []
     while i < len(a):
@@ -19,20 +23,28 @@ def total_cost(userid):
 # print(total_cost("U0a84d6de855ff90af62127932c7fde1f"))
 
 
-# 輸入userid和項目得到他的該項總花費
-def item_cost(userid, types):
+# 輸入userid和項目和年月得到他的該項總花費
+def item_cost(userid, types, time):
+    url = 'https://docs.google.com/spreadsheets/d/19OiyE1Pqp44BTDD9cXtpebntvuQHmPYRTLDy_OJCi2c/export?format=csv'  # 下載連結
+    webpage = urllib.request.urlopen(url)  # 開啟網頁
+    data = csv.DictReader(webpage.read().decode('utf-8-sig').splitlines())  # 讀取資料到data陣列中
+    a = [[i["userid"], i["項目"], i["必要嗎"], i["金額"], i["時間"]] for i in data]
     i = 0
     b = []
     while i < len(a):
-        if a[i][0] == userid and a[i][1] == types:
+        if a[i][0] == userid and a[i][1] == types and a[i][4][:4]+a[i][4][5:7] == time:
             b.append(int(a[i][3]))
         i = i + 1
     return sum(b)
-# print(item_cost("U0a84d6de855ff90af62127932c7fde1f", "學業"))
+#print(item_cost("U0a84d6de855ff90af62127932c7fde1f", "學業", "202106"))
 
 
 # 輸入userid和必要嗎得到他的該項總花費
 def ess_cost(userid, types):
+    url = 'https://docs.google.com/spreadsheets/d/19OiyE1Pqp44BTDD9cXtpebntvuQHmPYRTLDy_OJCi2c/export?format=csv'  # 下載連結
+    webpage = urllib.request.urlopen(url)  # 開啟網頁
+    data = csv.DictReader(webpage.read().decode('utf-8-sig').splitlines())  # 讀取資料到data陣列中
+    a = [[i["userid"], i["項目"], i["必要嗎"], i["金額"], i["時間"]] for i in data]
     i = 0
     b = []
     while i < len(a):
@@ -43,8 +55,12 @@ def ess_cost(userid, types):
 # print(ess_cost("U0a84d6de855ff90af62127932c7fde1f", "必要"))
 
 
-# 輸入userid和月分得到他的該月總花費
+# 輸入userid和年月得到他的該月總花費
 def month_cost(userid, types):
+    url = 'https://docs.google.com/spreadsheets/d/19OiyE1Pqp44BTDD9cXtpebntvuQHmPYRTLDy_OJCi2c/export?format=csv'  # 下載連結
+    webpage = urllib.request.urlopen(url)  # 開啟網頁
+    data = csv.DictReader(webpage.read().decode('utf-8-sig').splitlines())  # 讀取資料到data陣列中
+    a = [[i["userid"], i["項目"], i["必要嗎"], i["金額"], i["時間"]] for i in data]
     i = 0
     b = []
     while i < len(a):
@@ -52,10 +68,14 @@ def month_cost(userid, types):
             b.append(int(a[i][3]))
         i = i + 1
     return sum(b)
-
+#print(month_cost("U0a84d6de855ff90af62127932c7fde1f", "202106"))
 
 # 輸入userid和日期得到他的該天總花費
 def day_cost(userid, types):
+    url = 'https://docs.google.com/spreadsheets/d/19OiyE1Pqp44BTDD9cXtpebntvuQHmPYRTLDy_OJCi2c/export?format=csv'  # 下載連結
+    webpage = urllib.request.urlopen(url)  # 開啟網頁
+    data = csv.DictReader(webpage.read().decode('utf-8-sig').splitlines())  # 讀取資料到data陣列中
+    a = [[i["userid"], i["項目"], i["必要嗎"], i["金額"], i["時間"]] for i in data]
     i = 0
     b = []
     while i < len(a):
@@ -67,6 +87,10 @@ def day_cost(userid, types):
 
 # 輸入userid和日期得到他的該天花費明細
 def day_cost_list(userid, types):
+    url = 'https://docs.google.com/spreadsheets/d/19OiyE1Pqp44BTDD9cXtpebntvuQHmPYRTLDy_OJCi2c/export?format=csv'  # 下載連結
+    webpage = urllib.request.urlopen(url)  # 開啟網頁
+    data = csv.DictReader(webpage.read().decode('utf-8-sig').splitlines())  # 讀取資料到data陣列中
+    a = [[i["userid"], i["項目"], i["必要嗎"], i["金額"], i["時間"]] for i in data]
     i = 0
     b = []
     while i < len(a):
@@ -81,6 +105,10 @@ def day_cost_list(userid, types):
 # 輸入年月日 項目 必要性支出 金額 刪除資料
 
 def find_row(userid, item, ess, digit, time):
+    url = 'https://docs.google.com/spreadsheets/d/19OiyE1Pqp44BTDD9cXtpebntvuQHmPYRTLDy_OJCi2c/export?format=csv'  # 下載連結
+    webpage = urllib.request.urlopen(url)  # 開啟網頁
+    data = csv.DictReader(webpage.read().decode('utf-8-sig').splitlines())  # 讀取資料到data陣列中
+    a = [[i["userid"], i["項目"], i["必要嗎"], i["金額"], i["時間"]] for i in data]
     i = 0
     b = []
     reply = -2
@@ -108,6 +136,10 @@ banana = [[i["userid"], i["金額"], i["時間"]] for i in data3]
 
 
 def is_in_or_not(userid):
+    url2 = 'https://docs.google.com/spreadsheets/d/14VUMIPWXfOynfr_Eixa8S2La7ksA-3i5zTWWTUd-8JA/export?format=csv'  # 下載連結
+    webpage = urllib.request.urlopen(url2)  # 開啟網頁
+    data2 = csv.DictReader(webpage.read().decode('utf-8-sig').splitlines())  # 讀取資料到data陣列中
+    apple = [[i["userid"], i["金額"], i["時間"]] for i in data2]
     reply = "bad"
     i = 0
     while i < len(apple):
@@ -120,6 +152,10 @@ def is_in_or_not(userid):
 
 # 輸入userid和月分(202106)得到他的該月總收入
 def month_income(userid, types):
+    url3 = 'https://docs.google.com/spreadsheets/d/1OGn7xzKwI8xySKstNWhpnqglK3AzooVPT11MCBAOGH4/export?format=csv'  # 下載連結
+    webpage = urllib.request.urlopen(url3)  # 開啟網頁
+    data3 = csv.DictReader(webpage.read().decode('utf-8-sig').splitlines())  # 讀取資料到data陣列中
+    banana = [[i["userid"], i["金額"], i["時間"]] for i in data3]
     i = 0
     b = []
     while i < len(banana):
@@ -132,6 +168,10 @@ def month_income(userid, types):
 
 # 輸入userid和月分(202106)得到他的該月總預算
 def month_money(userid, types):
+    url2 = 'https://docs.google.com/spreadsheets/d/14VUMIPWXfOynfr_Eixa8S2La7ksA-3i5zTWWTUd-8JA/export?format=csv'  # 下載連結
+    webpage = urllib.request.urlopen(url2)  # 開啟網頁
+    data2 = csv.DictReader(webpage.read().decode('utf-8-sig').splitlines())  # 讀取資料到data陣列中
+    apple = [[i["userid"], i["金額"], i["時間"]] for i in data2]
     i = 0
     b = []
     while i < len(apple):

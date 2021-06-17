@@ -228,7 +228,7 @@ def callback(request):
 
 
                     elif mtext == "修改資料":
-                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="輸入:刪除(或補計)項目 必要性 金額 年月日\nex : 刪除飲食 不必要 20 20210605"))
+                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="輸入:刪除(或補記)項目 必要性 金額 年月日\nex : 刪除飲食 不必要 20 20210605"))
 
                     elif mtext[:2] == "刪除":
                         Sheet = GoogleSheets.open_by_key('19OiyE1Pqp44BTDD9cXtpebntvuQHmPYRTLDy_OJCi2c')
@@ -484,8 +484,35 @@ def callback(request):
                         Sheets.append_rows(g)
                         func.sendCarousel(event)
 
-                    elif mtext == '圖片轉盤':
-                        func.sendImgCarousel(event)
+                    elif mtext == '消費分析':
+                        string = func2get_today_date()
+                        year = string[:4]  # 年
+                        month = string[4:6]  # 月
+                        eatcost = func2.item_cost(uid, "飲食", year+month)
+                        playcost = func2.item_cost(uid, "娛樂", year + month)
+                        trafcost = func2.item_cost(uid, "交通", year + month)
+                        monthcost = func2.month_cost(uid, year+month)
+                        ratio = round(eatcost/monthcost)
+                        ratio2 = round(playcost/monthcost)
+                        ratio3 = round(trafcost / monthcost)
+                        reply1 = ""
+                        reply2 = ""
+                        reply3 = ""
+                        if ratio < 0.38:
+                            reply1 = "您在「飲食」方面的花費「低於」一般大學生"
+                        else :
+                            reply1 = "您在「飲食」方面的花費「高於」一般大學生"
+                        if ratio2 < 0.13:
+                            reply2= "您在「娛樂」方面的花費「低於」一般大學生"
+                        else :
+                            reply2 = "您在「娛樂」方面的花費「高於」一般大學生"
+                        if ratio3 < 0.15:
+                            reply3= "您在「交通」方面的花費「低於」一般大學生"
+                        else :
+                            reply3 = "您在「交通」方面的花費「高於」一般大學生"
+
+                        line_bot_api.reply_message(event.reply_token,TextSendMessage(text=reply1+"\n"+reply2+"\n"+reply3))
+
 
                     elif mtext == '購買披薩':
                         func.sendPizza(event)
