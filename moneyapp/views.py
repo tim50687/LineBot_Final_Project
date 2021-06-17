@@ -278,15 +278,15 @@ def callback(request):
                         pd.set_option('display.max_columns', 10)
                         pd.set_option('display.max_colwidth', 200)
                         pd.set_option('display.width', None)
-                        #chrome_options = webdriver.ChromeOptions()
-                        #chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-                        #chrome_options.add_argument("--headless")
-                        #chrome_options.add_argument("--disable-dev-shm-usage")
-                        #chrome_options.add_argument("--no-sandbox")
-                        #driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"),
-                        #                          chrome_options=chrome_options)
+                        chrome_options = webdriver.ChromeOptions()
+                        chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+                        chrome_options.add_argument("--headless")
+                        chrome_options.add_argument("--disable-dev-shm-usage")
+                        chrome_options.add_argument("--no-sandbox")
+                        driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"),
+                                                  chrome_options=chrome_options)
                         url = 'https://feebee.com.tw/'
-                        driver = webdriver.Chrome('D:/Download/chromedriver_win32 (1)/chromedriver.exe')
+                        #driver = webdriver.Chrome('D:/Download/chromedriver_win32 (1)/chromedriver.exe')
                         #driver = webdriver.Chrome('chromedriver.exe')
                         driver.get(url)
 
@@ -465,7 +465,7 @@ def callback(request):
                         #
                         # #
                         # # # #
-                        a = pd.concat([rangeData, Preferdata, Commondata, Continue], keys=["篩選過", "推薦", "一般", "繼續瀏覽"])
+                        #a = pd.concat([rangeData, Preferdata, Commondata, Continue], keys=["篩選過", "推薦", "一般", "繼續瀏覽"])
                         #print(a)
                         #a.to_csv("commondata.csv", index=False, encoding=("utf-8-sig"))  ## utf-8-sig 解決亂碼問題
 
