@@ -491,27 +491,34 @@ def callback(request):
                         eatcost = func2.item_cost(uid, "飲食", year+month)
                         playcost = func2.item_cost(uid, "娛樂", year + month)
                         trafcost = func2.item_cost(uid, "交通", year + month)
+                        thingcost = func2.item_cost(uid, "生活用品", year + month)
                         monthcost = func2.month_cost(uid, year+month)
                         ratio = round(eatcost/monthcost)
                         ratio2 = round(playcost/monthcost)
                         ratio3 = round(trafcost / monthcost)
+                        ratio4 = round(thingcost / monthcost)
                         reply1 = ""
                         reply2 = ""
                         reply3 = ""
+                        reply4 = ""
                         if ratio < 0.38:
-                            reply1 = "您在「飲食」方面的花費「低於」一般大學生"
+                            reply1 = "您在「飲食」的花費「低於」一般大學生"
                         else :
-                            reply1 = "您在「飲食」方面的花費「高於」一般大學生"
+                            reply1 = "您在「飲食」的花費「高於」一般大學生"
                         if ratio2 < 0.13:
-                            reply2= "您在「娛樂」方面的花費「低於」一般大學生"
+                            reply2= "您在「娛樂」的花費「低於」一般大學生"
                         else :
-                            reply2 = "您在「娛樂」方面的花費「高於」一般大學生"
+                            reply2 = "您在「娛樂」的花費「高於」一般大學生"
                         if ratio3 < 0.15:
-                            reply3= "您在「交通」方面的花費「低於」一般大學生"
+                            reply3= "您在「交通」的花費「低於」一般大學生"
                         else :
                             reply3 = "您在「交通」方面的花費「高於」一般大學生"
+                        if ratio4 < 0.2:
+                            reply4 = "您在「生活用品」的花費「低於」一般大學生"
+                        else :
+                            reply4 = "您在「生活用品」的花費「高於」一般大學生
 
-                        line_bot_api.reply_message(event.reply_token,TextSendMessage(text=reply1+"\n"+reply2+"\n"+reply3))
+                        line_bot_api.reply_message(event.reply_token,TextSendMessage(text=reply1+"\n"+reply2+"\n"+reply3+"\n"+reply4))
 
 
                     elif mtext == '購買披薩':
