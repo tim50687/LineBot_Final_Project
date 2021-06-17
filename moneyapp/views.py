@@ -4,11 +4,11 @@ from django.views.decorators.csrf import csrf_exempt
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
-from module import func
+from module import func, datadata, func2 ,check
 from urllib.parse import parse_qsl
-import json
-import gspread
+import jsonimport gspread
 from oauth2client.service_account import ServiceAccountCredentials as SAC
+
 import csv
 from selenium import webdriver
 import time
@@ -49,6 +49,8 @@ def callback(request):
             return HttpResponseBadRequest()
         oplist = ["飲食", "娛樂", "交通", "學業", "生活用品"]
         eslist = ["必要", "不必要"]
+        CLIENT_ID = "f469621fef60ebb"
+        title = "Uploaded with PyImgur"
         for event in events:
             if isinstance(event, MessageEvent):
                 if isinstance(event.message, TextMessage):
@@ -61,10 +63,10 @@ def callback(request):
                     timeString = time.strftime("%Y-%m-%d %H:%M:%S", struct_time)  # 轉成字串
 
                     if mtext == '記收入':
-                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請輸入:我有XX元\nex:我有6000元"))
+                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請輸入:/金額\nex:/1000"))
 
-                    elif mtext[:2] == "我有" and mtext[-1] == "元":
-                        money = mtext[mtext.find("有")+1:mtext.find("元")]
+                    elif mtext[0] == "/":
+                        money = mtext[1:]
                         response = [uid, money, timeString]
                         Sheet = GoogleSheets.open_by_key('1OGn7xzKwI8xySKstNWhpnqglK3AzooVPT11MCBAOGH4')
                         Sheets = Sheet.sheet1
@@ -72,7 +74,11 @@ def callback(request):
                         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="紀錄成功"))
 
                     elif mtext == '記支出':
-                        func.sendQuickreply(event)
+                        if func2.is_in_or_not(uid) == "bad":
+                            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
+                        else:
+                            func.sendQuickreply(event)
+
 
                     elif mtext in oplist:
                         func.sendQuickreply2(event)
@@ -98,27 +104,153 @@ def callback(request):
                         registered_data[uid]["時間"] = str(time)
                         with open('registered_data.json', 'w', encoding="utf-8") as f:
                             json.dump(registered_data, f, ensure_ascii=False)
+
+                        func.sendButton(event, uid)
+
+                    elif mtext == "正確":
+
                         with open('registered_data.json', 'r', encoding="utf-8") as f:
                             registered_data = json.load(f)
                         response = [uid, registered_data[uid]["項目"], registered_data[uid]["必要"],  registered_data[uid]["金額"], timeString]
-                        Sheet = GoogleSheets.open_by_key('1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY')
+                        Sheet = GoogleSheets.open_by_key('19OiyE1Pqp44BTDD9cXtpebntvuQHmPYRTLDy_OJCi2c')
                         Sheets = Sheet.sheet1
                         Sheets.append_row(response)
                         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="記帳成功"))
-                    elif mtext == '圖片':
-                        func.sendImage(event)
+
+                    elif mtext == '今年與往年同月每日平均金額比較圖':
+                        datadata.current_previous_same_month_day_Line_Chart('U0a84d6de855ff90af62127932c7fde1f', 'https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv')
+                        PATH1 = "send1.png"  # 圖片名稱
+                        im = pyimgur.Imgur(CLIENT_ID)
+                        uploaded_image1 = im.upload_image(PATH1, title=title)
+                        imgururl1 = uploaded_image1.link
+                        func.sendImage1(imgururl1, event)
+
+                    elif mtext == '今年與往年同月每日平均必要金額比較圖':
+                        datadata.current_previous_necessary_same_month_day_Line_Chart('U0a84d6de855ff90af62127932c7fde1f', 'https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv')
+                        PATH2 = "send2.png"  # 圖片名稱
+                        im = pyimgur.Imgur(CLIENT_ID)
+                        uploaded_image2 = im.upload_image(PATH2, title=title)
+                        imgururl2 = uploaded_image2.link
+                        func.sendImage2(imgururl2, event)
+
+                    elif mtext == '今年與往年同月每日平均不必要金額比較圖':
+                        datadata.current_previous_unnecessary_same_month_day_Line_Chart('U0a84d6de855ff90af62127932c7fde1f', 'https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv')
+                        PATH3 = "send3.png"  # 圖片名稱
+                        im = pyimgur.Imgur(CLIENT_ID)
+                        uploaded_image3 = im.upload_image(PATH3, title=title)
+                        imgururl3 = uploaded_image3.link
+                        func.sendImage3(imgururl3, event)
+
+                    elif mtext == '當月必要與不必要總花費占比':
+                        datadata.current_month_necessary_and_unnecessary_Pie_Chart('U0a84d6de855ff90af62127932c7fde1f', 'https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv')
+                        PATH4 = "send4.png"  # 圖片名稱
+                        im = pyimgur.Imgur(CLIENT_ID)
+                        uploaded_image4 = im.upload_image(PATH4, title=title)
+                        imgururl4 = uploaded_image4.link
+                        func.sendImage4(imgururl4, event)
+
+                    elif mtext == '今年當月必要與不必要總花費占比':
+                        datadata.current_month_necessary_and_unnecessary_double_Pie_Chart('U0a84d6de855ff90af62127932c7fde1f', 'https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv')
+                        PATH5 = "send5.png"  # 圖片名稱
+                        im = pyimgur.Imgur(CLIENT_ID)
+                        uploaded_image5 = im.upload_image(PATH5, title=title)
+                        imgururl5 = uploaded_image5.link
+                        func.sendImage5(imgururl5, event)
+                    elif mtext == '當月各項總花費占比':
+                        datadata.current_month_item_Pie_Chart('U0a84d6de855ff90af62127932c7fde1f','https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv')
+                        PATH6 = "send6.png"  # 圖片名稱
+                        im = pyimgur.Imgur(CLIENT_ID)
+                        uploaded_image6 = im.upload_image(PATH6, title=title)
+                        imgururl6 = uploaded_image6.link
+                        func.sendImage6(imgururl6, event)
+                    elif mtext == '今年當月各項總花費占比':
+                        datadata.current_month_item_double_Pie_Chart('U0a84d6de855ff90af62127932c7fde1f','https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv')
+                        PATH7 = "send7.png"  # 圖片名稱
+                        im = pyimgur.Imgur(CLIENT_ID)
+                        uploaded_image7 = im.upload_image(PATH7, title=title)
+                        imgururl7 = uploaded_image7.link
+                        func.sendImage7(imgururl7, event)
+
+                    elif mtext == '當月各項必要性總花費':
+                        datadata.current_month_necessary_and_unnecessary_item_Bar_Chart('U0a84d6de855ff90af62127932c7fde1f','https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv')
+                        PATH8 = "send8.png"  # 圖片名稱
+                        im = pyimgur.Imgur(CLIENT_ID)
+                        uploaded_image8 = im.upload_image(PATH8, title=title)
+                        imgururl8 = uploaded_image8.link
+                        func.sendImage8(imgururl8, event)
+
+                    elif mtext == '去年與今年當月各項必要性總花費':
+                        datadata.current_month_necessary_and_unnecessary_item_comparison_Bar_Chart('U0a84d6de855ff90af62127932c7fde1f','https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv')
+                        PATH9 = "send9.png"  # 圖片名稱
+                        im = pyimgur.Imgur(CLIENT_ID)
+                        uploaded_image9 = im.upload_image(PATH9, title=title)
+                        imgururl9 = uploaded_image9.link
+                        func.sendImage9(imgururl9, event)
+
+
+                    elif mtext == '去年與今年當月各項必要性總花費':
+                        datadata.current_month_necessary_and_unnecessary_item_comparison_Bar_Chart('U0a84d6de855ff90af62127932c7fde1f','https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv')
+                        PATH9 = "send9.png"  # 圖片名稱
+                        im = pyimgur.Imgur(CLIENT_ID)
+                        uploaded_image9 = im.upload_image(PATH9, title=title)
+                        imgururl9 = uploaded_image9.link
+                        func.sendImage9(imgururl9, event)
+
+                    elif mtext[-2:]=='花費' and len(mtext.split('花')[0]) < 5:
+                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=check.check_date_spend_record(uid, mtext)))
+
+                    elif mtext[0] == 'a':
+                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=check.check_spend_data_from_date(uid, mtext[1:])))
+
+                    elif mtext[-2:]=='花費' and len(mtext.split('花')[0]) == 5:
+                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=check.check_last_spend_data(uid, mtext)))
+
+                    elif mtext[-2:]=='花費' and len(mtext.split('花')[0]) > 5:
+                        line_bot_api.reply_message(event.reply_token,TextSendMessage(text=check.check_last_item_spend_data(uid, mtext)))
+
+
+                    elif mtext == '查詢':
+                        func.sendQuickreply4(event)
 
                     elif mtext == '圖表':
-                        CLIENT_ID = "f469621fef60ebb"
-                        PATH = "rplot.jpeg"  # 圖片名稱
-                        title = "Uploaded with PyImgur"
-                        im = pyimgur.Imgur(CLIENT_ID)
-                        uploaded_image = im.upload_image(PATH, title=title)
-                        imgururl = uploaded_image.link
-                        func.sendImage(imgururl, event)
+                        func.sendQuickreply3(event)
 
-                    elif mtext == '多項回覆':
-                        func.sendMulti(event)
+
+
+                    elif mtext[0] == "@":
+                        money = mtext[1:]
+                        response = [uid, money, timeString]
+                        Sheet = GoogleSheets.open_by_key('14VUMIPWXfOynfr_Eixa8S2La7ksA-3i5zTWWTUd-8JA')
+                        Sheets = Sheet.sheet1
+                        Sheets.append_row(response)
+                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="紀錄成功"))
+
+
+                    elif mtext == "修改資料":
+                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="輸入:刪除(或補計)項目 必要性 金額 年月日\nex : 刪除飲食 不必要 20 20210605"))
+
+                    elif mtext[:2] == "刪除":
+                        Sheet = GoogleSheets.open_by_key('19OiyE1Pqp44BTDD9cXtpebntvuQHmPYRTLDy_OJCi2c')
+                        Sheets = Sheet.sheet1
+                        sp = mtext.split(" ")
+                        rownumber = func2.find_row(uid, sp[0][2:], sp[1], sp[2], sp[3])
+                        if rownumber == 0:
+                            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="沒有這筆資料 或是輸入錯誤"))
+                        else:
+                            Sheets.delete_row(rownumber)
+                            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="刪除成功"))
+
+                    elif mtext[:2] == "補記":
+                        Sheet = GoogleSheets.open_by_key('19OiyE1Pqp44BTDD9cXtpebntvuQHmPYRTLDy_OJCi2c')
+                        Sheets = Sheet.sheet1
+                        sp = mtext.split(" ")
+                        row = [uid , sp[0][2:], sp[1], sp[2], sp[3][:4]+"-"+sp[3][4:6]+"-"+sp[3][6:9]]
+                        Sheets.append_row(row)
+                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="補記成功"))
+
+                    elif mtext == '這個月剩多少錢能花':
+                        r = func2.average(uid,func2.get_today_date()[:6])
+                        func.sendMulti(event, r)
 
                     elif mtext == '位置':
                         func.sendPosition(event)
@@ -145,15 +277,15 @@ def callback(request):
                         pd.set_option('display.max_columns', 10)
                         pd.set_option('display.max_colwidth', 200)
                         pd.set_option('display.width', None)
-                        chrome_options = webdriver.ChromeOptions()
-                        chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-                        chrome_options.add_argument("--headless")
-                        chrome_options.add_argument("--disable-dev-shm-usage")
-                        chrome_options.add_argument("--no-sandbox")
-                        driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"),
-                                                  chrome_options=chrome_options)
+                        #chrome_options = webdriver.ChromeOptions()
+                        #chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+                        #chrome_options.add_argument("--headless")
+                        #chrome_options.add_argument("--disable-dev-shm-usage")
+                        #chrome_options.add_argument("--no-sandbox")
+                        #driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"),
+                        #                          chrome_options=chrome_options)
                         url = 'https://feebee.com.tw/'
-                        #driver = webdriver.Chrome('D:/Download/chromedriver_win32 (1)/chromedriver.exe')
+                        driver = webdriver.Chrome('D:/Download/chromedriver_win32 (1)/chromedriver.exe')
                         #driver = webdriver.Chrome('chromedriver.exe')
                         driver.get(url)
 
@@ -333,8 +465,22 @@ def callback(request):
                         # #
                         # # # #
                         a = pd.concat([rangeData, Preferdata, Commondata, Continue], keys=["篩選過", "推薦", "一般", "繼續瀏覽"])
-                        print(a)
-                        a.to_csv("commondata.csv", index=False, encoding=("utf-8-sig"))  ## utf-8-sig 解決亂碼問題
+                        #print(a)
+                        #a.to_csv("commondata.csv", index=False, encoding=("utf-8-sig"))  ## utf-8-sig 解決亂碼問題
+
+                        Sheet = GoogleSheets.open_by_key('154DRXdwIK5QhggsevsNdrL3KK3IX3pc1YwSryMQZ18A')
+                        Sheets = Sheet.sheet1
+                        Sheets.clear()
+                        c = ["商品", "商品價格", "販售商城", "商品網址", "圖片網址"]
+                        d = rangeData.values.tolist()
+                        e = Preferdata.values.tolist()
+                        f = Commondata.values.tolist()
+                        g = Continue.values.tolist()
+                        Sheets.insert_row(c, 1)
+                        Sheets.append_rows(d)
+                        Sheets.append_rows(e)
+                        Sheets.append_rows(f)
+                        Sheets.append_rows(g)
                         func.sendCarousel(event)
 
                     elif mtext == '圖片轉盤':

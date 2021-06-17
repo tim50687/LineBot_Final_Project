@@ -1,5 +1,5 @@
 from django.conf import settings
-import csv
+import urllib.request, csv
 import re
 from linebot import LineBotApi
 from linebot.models import (
@@ -23,7 +23,7 @@ from linebot.models import (
     ImageCarouselTemplate,
     ImageCarouselColumn
 )
-
+import json
 
 line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
 baseurl = 'https://moneylinebot.herokuapp.com/static/'
@@ -44,11 +44,100 @@ def sendText(event):  # 傳送文字
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
 
 
-def sendImage(imgururl, event):  # 傳送圖片
+def sendImage1(imgururl1, event):  # 傳送圖片
     try:
         message = ImageSendMessage(
-            original_content_url=imgururl,
-            preview_image_url=imgururl
+            original_content_url=imgururl1,
+            preview_image_url=imgururl1
+        )
+        line_bot_api.reply_message(event.reply_token, message)
+    except:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
+
+
+def sendImage2(imgururl2, event):  # 傳送圖片
+    try:
+        message = ImageSendMessage(
+            original_content_url=imgururl2,
+            preview_image_url=imgururl2
+        )
+        line_bot_api.reply_message(event.reply_token, message)
+    except:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
+
+
+def sendImage3(imgururl3, event):  # 傳送圖片
+    try:
+        message = ImageSendMessage(
+            original_content_url=imgururl3,
+            preview_image_url=imgururl3
+        )
+        line_bot_api.reply_message(event.reply_token, message)
+    except:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
+
+
+def sendImage4(imgururl4, event):  # 傳送圖片
+    try:
+        message = ImageSendMessage(
+            original_content_url=imgururl4,
+            preview_image_url=imgururl4
+        )
+        line_bot_api.reply_message(event.reply_token, message)
+    except:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
+
+
+def sendImage5(imgururl5, event):  # 傳送圖片
+    try:
+        message = ImageSendMessage(
+            original_content_url=imgururl5,
+            preview_image_url=imgururl5
+        )
+        line_bot_api.reply_message(event.reply_token, message)
+    except:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
+
+
+def sendImage6(imgururl6, event):  # 傳送圖片
+    try:
+        message = ImageSendMessage(
+            original_content_url=imgururl6,
+            preview_image_url=imgururl6
+        )
+        line_bot_api.reply_message(event.reply_token, message)
+    except:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
+
+
+def sendImage7(imgururl7, event):  # 傳送圖片
+    try:
+        message = ImageSendMessage(
+            original_content_url=imgururl7,
+            preview_image_url=imgururl7
+        )
+        line_bot_api.reply_message(event.reply_token, message)
+    except:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
+
+
+def sendImage8(imgururl8, event):  # 傳送圖片
+    try:
+        message = ImageSendMessage(
+            original_content_url=imgururl8,
+            preview_image_url=imgururl8
+        )
+        line_bot_api.reply_message(event.reply_token, message)
+    except:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
+
+
+def sendImage9(imgururl9, event):  # 傳送圖片
+    try:
+        message = ImageSendMessage(
+            original_content_url=imgururl9,
+            preview_image_url=imgururl9,
+
         )
         line_bot_api.reply_message(event.reply_token, message)
     except:
@@ -66,19 +155,15 @@ def sendStick(event):  # 傳送貼圖
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
 
 
-def sendMulti(event):  # 多項傳送
+def sendMulti(event, r):  # 多項傳送
     try:
         message = [  # 串列
+            TextSendMessage(  # 傳送文字
+                text=r[:-12]
+            ),
             StickerSendMessage(  # 傳送貼圖
-                package_id='8525',
-                sticker_id='16581308'
-            ),
-            TextSendMessage(  # 傳送y文字
-                text="喵"
-            ),
-            ImageSendMessage(  # 傳送圖片
-                original_content_url="https://i.imgur.com/Ch66hFy.png",
-                preview_image_url="https://i.imgur.com/Ch66hFy.png"
+                package_id=r[-12:-8],
+                sticker_id=r[-8:]
             )
         ]
         line_bot_api.reply_message(event.reply_token, message)
@@ -148,6 +233,76 @@ def sendQuickreply2(event):  # 快速選單
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
 
 
+def sendQuickreply3(event):  # 快速選單
+    try:
+        message = TextSendMessage(
+            text='請選擇要看的圖',
+            quick_reply=QuickReply(
+                items=[
+                    QuickReplyButton(
+                        action=MessageAction(label="今年與往年同月每日平均金額比較圖", text="今年與往年同月每日平均金額比較圖")
+                    ),
+                    QuickReplyButton(
+                        action=MessageAction(label="今年與往年同月每日平均必要金額比較圖", text="今年與往年同月每日平均必要金額比較圖")
+                    ),
+                    QuickReplyButton(
+                        action=MessageAction(label="今年與往年同月每日平均不必要金額比較圖", text="今年與往年同月每日平均不必要金額比較圖")
+                    ),
+                    QuickReplyButton(
+                        action=MessageAction(label="當月必要與不必要總花費占比", text="當月必要與不必要總花費占比")
+                    ),
+                    QuickReplyButton(
+                        action=MessageAction(label="當月必要與不必要總花費占比與去年比較之圓餅圖", text="當月必要與不必要總花費占比與去年比較之圓餅圖")
+                    ),
+                    QuickReplyButton(
+                        action=MessageAction(label="當月各項總花費占比", text="當月各項總花費占比")
+                    ),
+                    QuickReplyButton(
+                        action=MessageAction(label="當月各項總花費占比與去年比較之圓餅圖", text="當月各項總花費占比與去年比較之圓餅圖")
+                    ),
+                    QuickReplyButton(
+                        action=MessageAction(label="當月各項必要性總花費", text="當月各項必要性總花費")
+                    ),
+                    QuickReplyButton(
+                        action=MessageAction(label="去年與今年當月各項必要性總花費", text="去年與今年當月各項必要性總花費")
+                    )
+                ]
+            )
+        )
+        line_bot_api.reply_message(event.reply_token, message)
+    except:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
+
+
+
+def sendQuickreply4(event):  # 快速選單
+    try:
+        message = TextSendMessage(
+            text='查詢方式 : \n1. 輸入 a年月日\n   ex : a20210625\n   可以看當日記帳資料\n2. 輸入查詢上"數量"筆花費(最多10筆)\n   ex : 查詢上三筆花費\n   可查花費\n3. 輸入查詢上"數量"筆"項目"花費紀錄\n   ex : 查詢上5筆娛樂花費\n   可查該項目花費',
+            quick_reply=QuickReply(
+                items=[
+                    QuickReplyButton(
+                        action=MessageAction(label="查詢今天花費", text="查詢今天花費")
+                    ),
+                    QuickReplyButton(
+                        action=MessageAction(label="查詢昨天花費", text="查詢昨天花費")
+                    ),
+                    QuickReplyButton(
+                        action=MessageAction(label="這個月剩多少錢能花", text="這個月剩多少錢能花")
+                    ),
+                    QuickReplyButton(
+                        action=MessageAction(label="查詢上一筆花費紀錄", text="查詢上一筆花費")
+                    ),
+                    QuickReplyButton(
+                        action=MessageAction(label="查詢上5筆飲食花費紀錄", text="查詢上5筆飲食花費")
+                    )
+                ]
+            )
+        )
+        line_bot_api.reply_message(event.reply_token, message)
+    except:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
+
 def sendVoice(event):  # 傳送聲音
     try:
         message = AudioSendMessage(
@@ -170,28 +325,30 @@ def sendVedio(event):  # 傳送影片
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
 
 
-def sendButton(event):  # 按鈕樣版
+
+
+def sendButton(event, uid):  # 按鈕樣版
     try:
+        with open('registered_data.json', 'r', encoding="utf-8") as f:
+            registered_data = json.load(f)
+
+        response = [uid, registered_data[uid]["項目"], registered_data[uid]["必要"], registered_data[uid]["金額"]]
+
         message = TemplateSendMessage(
             alt_text='按鈕樣板',
             template=ButtonsTemplate(
-                thumbnail_image_url='https://i.imgur.com/E4cOSLw.jpg',  # 顯示的圖片
-                title='按鈕樣版示範',  # 主標題
-                text='請選擇：',  # 副標題
+                #thumbnail_image_url='https://i.imgur.com/E4cOSLw.jpg',  # 顯示的圖片
+                title="記帳資料是否正確?",  # 主標題
+                text=response[1]+"\n"+response[2]+"支出"+"\n"+response[3]+"元",  # 副標題
                 actions=[
-                    MessageTemplateAction(  # 顯示文字計息
-                        label='文字訊息',
-                        text='文字訊息'
+                    MessageTemplateAction(  # 顯示文字
+                        label='正確',
+                        text='正確'
                     ),
-                    URITemplateAction(  # 開啟網頁
-                        label='連結網頁',
-                        uri='https://www.youtube.com/watch?v=072tU1tamd0'
-                    ),
-                    PostbackTemplateAction(  # 執行Postback功能,觸發Postback事件
-                        label='回傳訊息',  # 按鈕文字
-                        # text='@購買披薩',  # 顯示文字計息
-                        data='action=buy'  # Postback資料
-                    ),
+                    MessageTemplateAction(  # 顯示文字
+                        label='修改資料',
+                        text='記支出'
+                    )
                 ]
             )
         )
@@ -200,7 +357,7 @@ def sendButton(event):  # 按鈕樣版
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
 
 
-def sendConfirm(event):  # 確認樣板
+def sendConfirm(event, uid):  # 確認樣板
     try:
         message = TemplateSendMessage(
             alt_text='確認樣板',
@@ -224,9 +381,12 @@ def sendConfirm(event):  # 確認樣板
 
 def sendCarousel(event):  #轉盤樣板
     try:
-        with open('commondata.csv', newline='', encoding='utf-8') as csvfile:
-            rows = csv.reader(csvfile)
-            a = [[i[0], i[1], i[2], i[3], i[4]] for i in rows]
+        import urllib.request, csv
+        import re
+        url = 'https://docs.google.com/spreadsheets/d/154DRXdwIK5QhggsevsNdrL3KK3IX3pc1YwSryMQZ18A/export?format=csv'  # 下載連結
+        webpage = urllib.request.urlopen(url)  # 開啟網頁
+        data = csv.DictReader(webpage.read().decode('utf-8-sig').splitlines())  # 讀取資料到data陣列中
+        a = [[i["商品"], i["商品價格"], i["販售商城"], i["商品網址"], i["圖片網址"]] for i in data]
         i = 0
         while i < len(a):
             a[i][0] = re.sub(u"([^\u4e00-\u9fa5\u0030-\u0039\u0041-\u005a\u0061-\u007a])", "", a[i][0])
@@ -235,6 +395,17 @@ def sendCarousel(event):  #轉盤樣板
             alt_text='轉盤樣板',
             template=CarouselTemplate(
                 columns=[
+                    CarouselColumn(
+                        thumbnail_image_url=a[0][4],
+                        title=a[0][0][:35],
+                        text=a[0][1]+"元",
+                        actions=[
+                            URITemplateAction(
+                                label='商品連結',
+                                uri=a[0][3]
+                            )
+                        ]
+                    ),
                     CarouselColumn(
                         thumbnail_image_url=a[1][4],
                         title=a[1][0][:35],
@@ -333,17 +504,6 @@ def sendCarousel(event):  #轉盤樣板
                                 uri=a[9][3]
                             )
                         ]
-                    ),
-                    CarouselColumn(
-                        thumbnail_image_url=a[10][4],
-                        title=a[10][0][:35],
-                        text=a[10][1]+"元",
-                        actions=[
-                            URITemplateAction(
-                                label='商品連結',
-                                uri=a[10][3]
-                            )
-                        ]
                     )
                 ]
             )
@@ -353,24 +513,21 @@ def sendCarousel(event):  #轉盤樣板
         line_bot_api.reply_message(event.reply_token,TextSendMessage(text='發生錯誤！'))
 
 
-def sendImgCarousel(event):  # 圖片轉盤
+
+
+
+
+def sendImgCarousel(imgururl2, event):  # 圖片轉盤
     try:
         message = TemplateSendMessage(
             alt_text='圖片轉盤樣板',
             template=ImageCarouselTemplate(
                 columns=[
                     ImageCarouselColumn(
-                        image_url='https://i.imgur.com/gtWsPu9.jpg',
+                        image_url=imgururl2,
                         action=MessageTemplateAction(
-                            label='文字訊息',
-                            text='文字1'
-                        )
-                    ),
-                    ImageCarouselColumn(
-                        image_url='https://i.imgur.com/LRoLTlK.jpg',
-                        action=PostbackTemplateAction(
-                            label='回傳訊息',
-                            data='action=sell&item=文字2'
+                            label='訊息',
+                            text='1'
                         )
                     )
                 ]
