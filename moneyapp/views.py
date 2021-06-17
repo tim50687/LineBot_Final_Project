@@ -6,7 +6,8 @@ from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from module import func, datadata, func2 ,check
 from urllib.parse import parse_qsl
-import jsonimport gspread
+import json
+import gspread
 from oauth2client.service_account import ServiceAccountCredentials as SAC
 
 import csv
