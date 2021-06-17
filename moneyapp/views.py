@@ -516,7 +516,7 @@ def callback(request):
                         if ratio4 < 0.2:
                             reply4 = "您在「生活用品」的花費「低於」一般大學生"
                         else :
-                            reply4 = "您在「生活用品」的花費「高於」一般大學生
+                            reply4 = "您在「生活用品」的花費「高於」一般大學生"
 
                         line_bot_api.reply_message(event.reply_token,TextSendMessage(text=reply1+"\n"+reply2+"\n"+reply3+"\n"+reply4))
 
