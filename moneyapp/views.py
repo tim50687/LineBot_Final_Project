@@ -75,7 +75,7 @@ def callback(request):
                         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="紀錄成功"))
 
                     elif mtext == '記支出':
-                        if func2.is_in_or_not(uid) == "bad":
+                        if func2.is_in_or_not(uid , func2.get_today_date()[:5]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
                         else:
                             func.sendQuickreply(event)
@@ -109,7 +109,6 @@ def callback(request):
                         func.sendButton(event, uid)
 
                     elif mtext == "正確":
-
                         with open('registered_data.json', 'r', encoding="utf-8") as f:
                             registered_data = json.load(f)
                         response = [uid, registered_data[uid]["項目"], registered_data[uid]["必要"],  registered_data[uid]["金額"], timeString]
@@ -209,13 +208,11 @@ def callback(request):
                     elif mtext[-2:]=='花費' and len(mtext.split('花')[0]) > 5:
                         line_bot_api.reply_message(event.reply_token,TextSendMessage(text=check.check_last_item_spend_data(uid, mtext)))
 
-
                     elif mtext == '查詢':
                         func.sendQuickreply4(event)
 
                     elif mtext == '圖表':
                         func.sendQuickreply3(event)
-
 
 
                     elif mtext[0] == "@":
@@ -514,9 +511,9 @@ def callback(request):
                         else :
                             reply3 = "您在「交通」方面的花費「高於」一般大學生"
                         if ratio4 < 0.2:
-                            reply4 = "您在「生活用品」的花費「低於」一般大學生"
+                            reply4 = "您在「生活用品」的花費「低於」一般\n大學生"
                         else :
-                            reply4 = "您在「生活用品」的花費「高於」一般大學生"
+                            reply4 = "您在「生活用品」的花費「高於」一般\n大學生"
 
                         line_bot_api.reply_message(event.reply_token,TextSendMessage(text=reply1+"\n"+reply2+"\n"+reply3+"\n"+reply4))
 

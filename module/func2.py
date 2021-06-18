@@ -117,7 +117,7 @@ def find_row(userid, item, ess, digit, time):
             b.append(str(i))
             reply = b[0]
         i = i + 1
-    return int(reply)+2
+    return int(reply) + 2
 # print(delete_by_row("U0a84d6de855ff90af62127932c7fde1f", "飲食", "不必要", "98", "20210602"))
 
 
@@ -135,7 +135,7 @@ banana = [[i["userid"], i["金額"], i["時間"]] for i in data3]
 
 
 
-def is_in_or_not(userid):
+def is_in_or_not(userid, types):
     url2 = 'https://docs.google.com/spreadsheets/d/14VUMIPWXfOynfr_Eixa8S2La7ksA-3i5zTWWTUd-8JA/export?format=csv'  # 下載連結
     webpage = urllib.request.urlopen(url2)  # 開啟網頁
     data2 = csv.DictReader(webpage.read().decode('utf-8-sig').splitlines())  # 讀取資料到data陣列中
@@ -143,7 +143,7 @@ def is_in_or_not(userid):
     reply = "bad"
     i = 0
     while i < len(apple):
-        if userid in apple[i]:
+        if userid in apple[i] and apple[i][2][:4]+apple[i][2][5:7] == types:
             reply = "good"
         i = i + 1
     return reply
@@ -214,27 +214,29 @@ def last_day_of_month(any_day):
 
 
 string = get_today_date()
-year = int(string[:4]) # 年
+year = int(string[:4])  # 年
 month = int(string[4:6])  # 月
-day = int(string[-2:]) # 日
+day = int(string[-2:])  # 日
 res = last_day_of_month(datetime.date(year, month, day))
 lastday = str(res)[-2:]
+
+
 
 # 輸入userid和月份得到以後幾天平均可花費金額
 def average(userid, types):
     money = income_minus_cost(userid, types)
     left = int(lastday) - day + 1
     avg = round(money / left)
-    if money > 0 and money > 300 :
-        reply = "剩下的幾天你平均每一天可以花"+str(avg)+"元"+'\n應該蠻充裕的 恭喜你'
+    if  avg > 200 :
+        reply = "這個月還剩"+str(money)+"元"+"\n"+"剩下的幾天你平均每一天可以花"+str(avg)+"元"+'\n應該蠻充裕的 恭喜你'
         u = '6362'
         v = "11087940"
-    elif money > 0 and money < 50:
-        reply = "剩下的幾天你平均每一天可以花" + str(avg) + "元" + '\n加油 省著點用應該能活到月底'
+    elif 100 <= avg < 200 :
+        reply = "這個月還剩"+str(money)+"元"+"\n"+"剩下的幾天你平均每一天可以花" + str(avg) + "元" + '\n加油 省著點用應該能活到月底'
         u = '6362'
         v = '11087933'
-    elif money > 0 and money < 50:
-        reply = "剩下的幾天你平均每一天可以花" + str(avg) + "元" + '\n哎呀呀 要準備開始吃泡麵囉'
+    elif 50 <= avg < 100 :
+        reply = "這個月還剩"+str(money)+"元"+"\n"+"剩下的幾天你平均每一天可以花" + str(avg) + "元" + '\n哎呀呀 要準備開始吃泡麵囉'
         u = '6362'
         v = '11087937'
     else :
