@@ -1407,7 +1407,7 @@ def current_month_necessary_and_unnecessary_double_Pie_Chart(userid, url):
     plt.savefig('send5.png')
 #當月各項總花費占比圓餅圖
 def current_month_item_Pie_Chart(userid, url):
-    plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']
+    plt.rcParams['font.sans-serif'] = ['Microsoft JhengHei']
     plt.rcParams['axes.unicode_minus'] = False
     fig, ax = plt.subplots()
     day_list = []

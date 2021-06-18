@@ -143,6 +143,16 @@ def sendImage9(imgururl9, event):  # 傳送圖片
     except:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
 
+def sendImage15(event, url):  # 傳送圖片
+    try:
+        message = ImageSendMessage(
+            original_content_url=url,
+            preview_image_url=url,
+        )
+        line_bot_api.reply_message(event.reply_token, message)
+    except:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text='發生錯誤！'))
+
 
 def sendStick(event):  # 傳送貼圖
     try:
@@ -246,10 +256,25 @@ def sendQuickreply3(event):  # 快速選單
                         action=MessageAction(label="當月各項總花費占比", text="當月各項總花費占比")
                     ),
                     QuickReplyButton(
-                        action=MessageAction(label="當月各項總花費占比與去年比較之圓餅圖", text="當月各項總花費占比與去年比較之圓餅圖")
+                        action=MessageAction(label="當月各項必要性總花費", text="當月各項必要性總花費")
                     ),
                     QuickReplyButton(
-                        action=MessageAction(label="當月各項必要性總花費", text="當月各項必要性總花費")
+                        action=MessageAction(label="去年與今年當月各項必要性總花費", text="去年與今年當月各項必要性總花費")
+                    ),
+                    QuickReplyButton(
+                        action=MessageAction(label="今年當月必要與不必要總花費占比", text="今年當月必要與不必要總花費占比")
+                    ),
+                    QuickReplyButton(
+                        action=MessageAction(label="今年當月各項總花費占比", text="今年當月各項總花費占比")
+                    ),
+                    QuickReplyButton(
+                        action=MessageAction(label="今年與往年同月每日平均金額比較圖", text="今年與往年同月每日平均金額比較圖")
+                    ),
+                    QuickReplyButton(
+                        action=MessageAction(label="今年與往年同月每日平均必要金額比較圖", text="今年與往年同月每日平均必要金額比較圖")
+                    ),
+                    QuickReplyButton(
+                        action=MessageAction(label="今年與往年同月每日平均不必要金額比較圖", text="今年與往年同月每日平均不必要金額比較圖")
                     )
                 ]
             )

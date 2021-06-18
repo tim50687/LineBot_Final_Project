@@ -6,6 +6,8 @@ from linebot.exceptions import InvalidSignatureError, LineBotApiError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from module import func, datadata, func2 ,check
 from urllib.parse import parse_qsl
+from googleapiclient.http import MediaFileUpload
+from credent import Google
 import json
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials as SAC
@@ -30,7 +32,11 @@ registered_data = {}
 with open('registered_data.json', 'w', encoding="utf-8") as f:
     json.dump(registered_data, f, ensure_ascii=False)
 data = {}
-
+CLIENT_SECRET_FILE = 'client_secret_676762065519-tijh4r8hulu6ajfr2u164pqo3c3l7btp.apps.googleusercontent.com.json'
+API_NAME = 'drive'
+API_VERSION = 'v3'
+SCOPES = ['https://www.googleapis.com/auth/drive']
+service = Google.Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)
 
 
 
@@ -62,6 +68,7 @@ def callback(request):
                     time_stamp = int(str(timer)[:10])
                     struct_time = time.localtime(time_stamp)  # 轉成時間元組
                     timeString = time.strftime("%Y-%m-%d %H:%M:%S", struct_time)  # 轉成字串
+                    cost = 'https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv'
 
                     if mtext == '記收入':
                         if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
@@ -79,6 +86,36 @@ def callback(request):
                             Sheets = Sheet.sheet1
                             Sheets.append_row(response)
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="紀錄成功"))
+
+                    elif mtext == '圖':
+
+                        a = [uid]
+                        for i in a:
+                            file_metadata = {
+                                "name": i,
+                                'mimeType': 'application/vnd.google-apps.folder'
+                            }
+                            fold = service.files().create(body=file_metadata, fields='id').execute()       # 雲端資料夾的id
+
+                        file_names = ['052102.jpg']
+                        mime_types = ['image/jpeg']
+                        for u, v in zip(file_names, mime_types):
+                            file_metadata = {
+                                'name': u,
+                                'parents': [fold]
+                            }
+                            media = MediaFileUpload('D:/CTPS/herokuenv/invoicehero/{}'.format(u),
+                                                    mimetype=v)  # 圖片在本機的位置
+                            id = service.files().create(
+                                body=file_metadata,
+                                media_body=media,
+                                fields='id'
+                            ).execute()['id']
+                            print(id)
+                            url = 'https://drive.google.com/uc?export=view&id='+id
+                            print(url)
+                            func.sendImage15(event, url)
+
 
 
                     elif mtext == '記支出':
@@ -142,88 +179,173 @@ def callback(request):
 
 
                     elif mtext == '今年與往年同月每日平均金額比較圖':
-                        if func2.is_in_or_not(uid , func2.get_today_date()[:5]) == "bad":
+                        if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
                         else:
-                            datadata.current_previous_same_month_day_Line_Chart('U0a84d6de855ff90af62127932c7fde1f',
-                                                                                'https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv')
-                            PATH1 = "send1.png"  # 圖片名稱
-                            im = pyimgur.Imgur(CLIENT_ID)
-                            uploaded_image1 = im.upload_image(PATH1, title=title)
-                            imgururl1 = uploaded_image1.link
-                            func.sendImage1(imgururl1, event)
+                            datadata.current_previous_same_month_day_Line_Chart(uid, cost )
+                            file_metadata = {
+                                'name': 'send1.png',
+                                'parents': ["1C-84x5gomshiGb1wxDxemewMyLwwsU1m"]
+                            }
+                            media = MediaFileUpload('D:/CTPS/herokuenv/invoicehero/{}'.format('send1.png'),
+                                                    mimetype='image/png')  # 圖片在本機的位置
+                            id = service.files().create(
+                                body=file_metadata,
+                                media_body=media,
+                                fields='id'
+                            ).execute()['id']
+                            url = 'https://drive.google.com/uc?id=' + id
+
+                            func.sendImage15(event, url)
 
 
                     elif mtext == '今年與往年同月每日平均必要金額比較圖':
-                        datadata.current_previous_necessary_same_month_day_Line_Chart('U0a84d6de855ff90af62127932c7fde1f', 'https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv')
-                        PATH2 = "send2.png"  # 圖片名稱
-                        im = pyimgur.Imgur(CLIENT_ID)
-                        uploaded_image2 = im.upload_image(PATH2, title=title)
-                        imgururl2 = uploaded_image2.link
-                        func.sendImage2(imgururl2, event)
+                        datadata.current_previous_necessary_same_month_day_Line_Chart(uid, cost)
+                        file_metadata = {
+                            'name': 'send2.png',
+                            'parents': ["1C-84x5gomshiGb1wxDxemewMyLwwsU1m"]
+                        }
+                        media = MediaFileUpload('D:/CTPS/herokuenv/invoicehero/{}'.format('send2.png'),
+                                                mimetype='image/png')  # 圖片在本機的位置
+                        id = service.files().create(
+                            body=file_metadata,
+                            media_body=media,
+                            fields='id'
+                        ).execute()['id']
+                        url = 'https://drive.google.com/uc?id=' + id
+
+                        func.sendImage15(event, url)
 
                     elif mtext == '今年與往年同月每日平均不必要金額比較圖':
-                        datadata.current_previous_unnecessary_same_month_day_Line_Chart('U0a84d6de855ff90af62127932c7fde1f', 'https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv')
-                        PATH3 = "send3.png"  # 圖片名稱
-                        im = pyimgur.Imgur(CLIENT_ID)
-                        uploaded_image3 = im.upload_image(PATH3, title=title)
-                        imgururl3 = uploaded_image3.link
-                        func.sendImage3(imgururl3, event)
+                        datadata.current_previous_unnecessary_same_month_day_Line_Chart(uid, cost)
+                        file_metadata = {
+                            'name': 'send3.png',
+                            'parents': ["1C-84x5gomshiGb1wxDxemewMyLwwsU1m"]
+                        }
+                        media = MediaFileUpload('D:/CTPS/herokuenv/invoicehero/{}'.format('send3.png'),
+                                                mimetype='image/png')  # 圖片在本機的位置
+                        id = service.files().create(
+                            body=file_metadata,
+                            media_body=media,
+                            fields='id'
+                        ).execute()['id']
+                        url = 'https://drive.google.com/uc?id=' + id
+
+                        func.sendImage15(event, url)
 
                     elif mtext == '當月必要與不必要總花費占比':
-                        datadata.current_month_necessary_and_unnecessary_Pie_Chart('U0a84d6de855ff90af62127932c7fde1f', 'https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv')
-                        PATH4 = "send4.png"  # 圖片名稱
-                        im = pyimgur.Imgur(CLIENT_ID)
-                        uploaded_image4 = im.upload_image(PATH4, title=title)
-                        imgururl4 = uploaded_image4.link
-                        func.sendImage4(imgururl4, event)
+                        datadata.current_month_necessary_and_unnecessary_Pie_Chart(uid, cost)
+                        file_metadata = {
+                            'name': 'send4.png',
+                            'parents': ["1C-84x5gomshiGb1wxDxemewMyLwwsU1m"]
+                        }
+                        media = MediaFileUpload('D:/CTPS/herokuenv/invoicehero/{}'.format('send4.png'),
+                                                mimetype='image/png')  # 圖片在本機的位置
+                        id = service.files().create(
+                            body=file_metadata,
+                            media_body=media,
+                            fields='id'
+                        ).execute()['id']
+                        url = 'https://drive.google.com/uc?id=' + id
+
+                        func.sendImage15(event, url)
 
                     elif mtext == '今年當月必要與不必要總花費占比':
-                        datadata.current_month_necessary_and_unnecessary_double_Pie_Chart('U0a84d6de855ff90af62127932c7fde1f', 'https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv')
-                        PATH5 = "send5.png"  # 圖片名稱
-                        im = pyimgur.Imgur(CLIENT_ID)
-                        uploaded_image5 = im.upload_image(PATH5, title=title)
-                        imgururl5 = uploaded_image5.link
-                        func.sendImage5(imgururl5, event)
+                        datadata.current_month_necessary_and_unnecessary_double_Pie_Chart(uid, cost)
+                        file_metadata = {
+                            'name': 'send5.png',
+                            'parents': ["1C-84x5gomshiGb1wxDxemewMyLwwsU1m"]
+                        }
+                        media = MediaFileUpload('D:/CTPS/herokuenv/invoicehero/{}'.format('send5.png'),
+                                                mimetype='image/png')  # 圖片在本機的位置
+                        id = service.files().create(
+                            body=file_metadata,
+                            media_body=media,
+                            fields='id'
+                        ).execute()['id']
+                        url = 'https://drive.google.com/uc?id=' + id
+
+                        func.sendImage15(event, url)
+
+
                     elif mtext == '當月各項總花費占比':
-                        datadata.current_month_item_Pie_Chart('U0a84d6de855ff90af62127932c7fde1f','https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv')
-                        PATH6 = "send6.png"  # 圖片名稱
-                        im = pyimgur.Imgur(CLIENT_ID)
-                        uploaded_image6 = im.upload_image(PATH6, title=title)
-                        imgururl6 = uploaded_image6.link
-                        func.sendImage6(imgururl6, event)
+                        datadata.current_month_item_Pie_Chart(uid, cost)
+                        file_metadata = {
+                            'name': 'send6.png',
+                            'parents': ["1C-84x5gomshiGb1wxDxemewMyLwwsU1m"]
+                        }
+                        media = MediaFileUpload('/invoicehero/{}'.format('send6.png'),
+                                                mimetype='image/png')  # 圖片在本機的位置
+                        id = service.files().create(
+                            body=file_metadata,
+                            media_body=media,
+                            fields='id'
+                        ).execute()['id']
+                        url = 'https://drive.google.com/uc?id=' + id
+
+                        func.sendImage15(event, url)
+
+
+
                     elif mtext == '今年當月各項總花費占比':
-                        datadata.current_month_item_double_Pie_Chart('U0a84d6de855ff90af62127932c7fde1f','https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv')
-                        PATH7 = "send7.png"  # 圖片名稱
-                        im = pyimgur.Imgur(CLIENT_ID)
-                        uploaded_image7 = im.upload_image(PATH7, title=title)
-                        imgururl7 = uploaded_image7.link
-                        func.sendImage7(imgururl7, event)
+                        datadata.current_month_item_Pie_Chart(uid, cost)
+                        file_metadata = {
+                            'name': 'send7.png',
+                            'parents': ["1C-84x5gomshiGb1wxDxemewMyLwwsU1m"]
+                        }
+                        media = MediaFileUpload('D:/CTPS/herokuenv/invoicehero/{}'.format('send7.png'),
+                                                mimetype='image/png')  # 圖片在本機的位置
+                        id = service.files().create(
+                            body=file_metadata,
+                            media_body=media,
+                            fields='id'
+                        ).execute()['id']
+                        url = 'https://drive.google.com/uc?id=' + id
+
+                        func.sendImage15(event, url)
 
                     elif mtext == '當月各項必要性總花費':
-                        datadata.current_month_necessary_and_unnecessary_item_Bar_Chart('U0a84d6de855ff90af62127932c7fde1f','https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv')
-                        PATH8 = "send8.png"  # 圖片名稱
-                        im = pyimgur.Imgur(CLIENT_ID)
-                        uploaded_image8 = im.upload_image(PATH8, title=title)
-                        imgururl8 = uploaded_image8.link
-                        func.sendImage8(imgururl8, event)
+                        datadata.current_month_necessary_and_unnecessary_item_Bar_Chart(uid, cost)
+                        file_metadata = {
+                            'name': 'send8.png',
+                            'parents': ["1C-84x5gomshiGb1wxDxemewMyLwwsU1m"]
+                        }
+                        media = MediaFileUpload('D:/CTPS/herokuenv/invoicehero/{}'.format('send8.png'),
+                                                mimetype='image/png')  # 圖片在本機的位置
+                        id = service.files().create(
+                            body=file_metadata,
+                            media_body=media,
+                            fields='id'
+                        ).execute()['id']
+                        url = 'https://drive.google.com/uc?id=' + id
+
+                        func.sendImage15(event, url)
 
                     elif mtext == '去年與今年當月各項必要性總花費':
-                        datadata.current_month_necessary_and_unnecessary_item_comparison_Bar_Chart('U0a84d6de855ff90af62127932c7fde1f','https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv')
-                        PATH9 = "send9.png"  # 圖片名稱
-                        im = pyimgur.Imgur(CLIENT_ID)
-                        uploaded_image9 = im.upload_image(PATH9, title=title)
-                        imgururl9 = uploaded_image9.link
-                        func.sendImage9(imgururl9, event)
+                        datadata.current_month_necessary_and_unnecessary_item_comparison_Bar_Chart(uid, cost)
+                        file_metadata = {
+                            'name': 'send9.png',
+                            'parents': ["1C-84x5gomshiGb1wxDxemewMyLwwsU1m"]
+                        }
+                        media = MediaFileUpload('D:/CTPS/herokuenv/invoicehero/{}'.format('send9.png'),
+                                                mimetype='image/png')  # 圖片在本機的位置
+                        id = service.files().create(
+                            body=file_metadata,
+                            media_body=media,
+                            fields='id'
+                        ).execute()['id']
+                        url = 'https://drive.google.com/uc?id=' + id
+
+                        func.sendImage15(event, url)
 
 
-                    elif mtext == '去年與今年當月各項必要性總花費':
-                        datadata.current_month_necessary_and_unnecessary_item_comparison_Bar_Chart('U0a84d6de855ff90af62127932c7fde1f','https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv')
-                        PATH9 = "send9.png"  # 圖片名稱
-                        im = pyimgur.Imgur(CLIENT_ID)
-                        uploaded_image9 = im.upload_image(PATH9, title=title)
-                        imgururl9 = uploaded_image9.link
-                        func.sendImage9(imgururl9, event)
+                    #elif mtext == '去年與今年當月各項必要性總花費':
+                     #   datadata.current_month_necessary_and_unnecessary_item_comparison_Bar_Chart('U0a84d6de855ff90af62127932c7fde1f','https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv')
+                      #  PATH9 = "send9.png"  # 圖片名稱
+                       # im = pyimgur.Imgur(CLIENT_ID)
+                        #uploaded_image9 = im.upload_image(PATH9, title=title)
+                        #imgururl9 = uploaded_image9.link
+                        #func.sendImage9(imgururl9, event)
 
                     elif mtext[-2:]=='花費' and len(mtext.split('花')[0]) < 5:
                         if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
@@ -266,6 +388,29 @@ def callback(request):
                         if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
                         else:
+                            i = 1
+                            b = []
+                            while i < 10:
+                                a = "send" + str(i) + ".png"
+                                filepath = "D:/CTPS/herokuenv/invoicehero/" + a
+                                if os.path.isfile(filepath):
+                                    b.append("good")
+                                else:
+                                    b.append("bad")
+                                i = i + 1
+                            print(b)
+                            i = 0
+                            while i < 9:
+                                a = "send" + str(i+1) + ".png"
+                                filepath = "D:/CTPS/herokuenv/invoicehero/" + a
+                                if b[i] == "good":
+                                    try:
+                                        os.remove(filepath)
+                                    except OSError as e:
+                                        print(e)
+                                else:
+                                    print("File is not in")
+                                i = i + 1
                             func.sendQuickreply3(event)
 
 
