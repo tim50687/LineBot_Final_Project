@@ -327,7 +327,7 @@ def callback(request):
                             index = func2.find_row_money(uid, func2.get_today_date()[:6])
                             Sheet = GoogleSheets.open_by_key('14VUMIPWXfOynfr_Eixa8S2La7ksA-3i5zTWWTUd-8JA')
                             Sheets = Sheet.sheet1
-                            sp = mtext.[2:]
+                            sp = mtext[2:]
                             if index == 0:
                                 line_bot_api.reply_message(event.reply_token, TextSendMessage(text="沒有這筆資料 或是輸入錯誤"))
                             else:
