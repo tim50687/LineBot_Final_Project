@@ -144,7 +144,7 @@ def is_in_or_not(userid, types):
     reply = "bad"
     i = 0
     while i < len(apple):
-        if userid in apple[i] and apple[i][2][:4]+apple[i][2][5:7] == types:
+        if userid in apple[i][0] and apple[i][2][:4]+apple[i][2][5:7] == types:
             reply = "good"
         i = i + 1
     return reply
@@ -158,12 +158,12 @@ def is_in_or_not_cost(userid, types):
     reply = "bad"
     i = 0
     while i < len(a):
-        if userid in a[i] and a[i][2][:4]+a[i][2][5:7] == types:
+        if userid in a[i][0] and a[i][4][:4]+a[i][4][5:7] == types:
             reply = "good"
         i = i + 1
     return reply
 
-
+#print(is_in_or_not_cost('U0a84d6de855ff90af62127932c7fde1f', '202106'))
 
 
 # 輸入userid和月分(202106)得到他的該月總收入
