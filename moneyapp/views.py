@@ -274,7 +274,7 @@ def callback(request):
                             'name': 'send6.png',
                             'parents': ["1C-84x5gomshiGb1wxDxemewMyLwwsU1m"]
                         }
-                        media = MediaFileUpload('/invoicehero/{}'.format('send6.png'),
+                        media = MediaFileUpload('send6.png'),
                                                 mimetype='image/png')  # 圖片在本機的位置
                         id = service.files().create(
                             body=file_metadata,
