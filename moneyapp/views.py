@@ -271,15 +271,13 @@ def callback(request):
 
 
                     elif mtext[0] == "@":
-                        if func2.is_in_or_not(uid , func2.get_today_date()[:5]) == "bad":
-                            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
-                        else:
-                            money = mtext[1:]
-                            response = [uid, money, timeString]
-                            Sheet = GoogleSheets.open_by_key('14VUMIPWXfOynfr_Eixa8S2La7ksA-3i5zTWWTUd-8JA')
-                            Sheets = Sheet.sheet1
-                            Sheets.append_row(response)
-                            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="紀錄成功"))
+                        money = mtext[1:]
+                        response = [uid, money, timeString]
+                        Sheet = GoogleSheets.open_by_key('14VUMIPWXfOynfr_Eixa8S2La7ksA-3i5zTWWTUd-8JA')
+                        Sheets = Sheet.sheet1
+                        Sheets.append_row(response)
+                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="紀錄成功"))
+
 
 
 
