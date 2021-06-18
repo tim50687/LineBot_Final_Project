@@ -115,7 +115,8 @@ def find_row(userid, item, ess, digit, time):
     while i < len(a):
         if userid == a[i][0] and item == a[i][1] and digit == a[i][3] and ess == a[i][2] and time == a[i][4][:4]+a[i][4][5:7]+a[i][4][8:10]:
             b.append(str(i))
-            reply = b[0]
+            if len(b) > 0:
+                reply = b[0]
         i = i + 1
     return int(reply) + 2
 # print(delete_by_row("U0a84d6de855ff90af62127932c7fde1f", "飲食", "不必要", "98", "20210602"))
@@ -156,7 +157,7 @@ def is_in_or_not_cost(userid, types):
     a = [[i["userid"], i["項目"], i["必要嗎"], i["金額"], i["時間"]] for i in data]
     reply = "bad"
     i = 0
-    while i < len(apple):
+    while i < len(a):
         if userid in a[i] and a[i][2][:4]+a[i][2][5:7] == types:
             reply = "good"
         i = i + 1
@@ -271,9 +272,12 @@ def find_row_money(userid, time):
     i = 0
     b = []
     reply = -2
-    while i < len(a):
-        if userid == a[i][0] and time == a[i][4][:4]+a[i][4][5:7]:
-            apple.append(str(i))
-            reply = b[0]
+    while i < len(apple):
+        if userid == apple[i][0] and time == apple[i][2][:4]+apple[i][2][5:7]:
+            b.append(str(i))
+            if len(b) > 0:
+                reply = b[0]
+
         i = i + 1
     return int(reply) + 2
+print(find_row_money('U0a84d6de855ff90af62127932c7fde1f', "202106"))
