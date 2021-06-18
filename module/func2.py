@@ -158,7 +158,7 @@ def is_in_or_not_cost(userid, types):
     reply = "bad"
     i = 0
     while i < len(a):
-        if userid in a[i][0] and a[i][4][:4]+a[i][4][5:7] == types:
+        if userid in a[i] and a[i][4][:4]+a[i][4][5:7] == types:
             reply = "good"
         i = i + 1
     return reply
