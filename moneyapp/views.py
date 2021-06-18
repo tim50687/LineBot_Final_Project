@@ -565,6 +565,7 @@ def callback(request):
                     elif mtext == '消費分析':
                         if func2.is_in_or_not(uid, func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
+                        else:
                             if func2.is_in_or_not_cost(uid, func2.get_today_date()[:6]) == "bad":
                                 line_bot_api.reply_message(event.reply_token, TextSendMessage(text="您還沒有紀錄支出呦"))
                             else:
