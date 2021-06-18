@@ -144,7 +144,7 @@ def is_in_or_not(userid, types):
     reply = "bad"
     i = 0
     while i < len(apple):
-        if userid in apple[i][0] and apple[i][2][:4]+apple[i][2][5:7] == types:
+        if userid in apple[i] and apple[i][2][:4]+apple[i][2][5:7] == types:
             reply = "good"
         i = i + 1
     return reply

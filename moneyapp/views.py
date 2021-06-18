@@ -601,8 +601,7 @@ def callback(request):
                                 else:
                                     reply4 = "您在「生活用品」的花費「高於」一般\n大學生"
 
-                                line_bot_api.reply_message(event.reply_token, TextSendMessage(
-                                    text=reply1 + "\n" + reply2 + "\n" + reply3 + "\n" + reply4))
+                                line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply1 + "\n" + reply2 + "\n" + reply3 + "\n" + reply4))
 
 
 
