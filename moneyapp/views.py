@@ -64,13 +64,13 @@ def callback(request):
                     timeString = time.strftime("%Y-%m-%d %H:%M:%S", struct_time)  # 轉成字串
 
                     if mtext == '記收入':
-                        if func2.is_in_or_not(uid , func2.get_today_date()[:5]) == "bad":
+                        if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
                         else:
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請輸入:/金額\nex:/1000"))
 
                     elif mtext[0] == "/":
-                        if func2.is_in_or_not(uid , func2.get_today_date()[:5]) == "bad":
+                        if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
                         else:
                             money = mtext[1:]
@@ -82,14 +82,14 @@ def callback(request):
 
 
                     elif mtext == '記支出':
-                        if func2.is_in_or_not(uid , func2.get_today_date()[:5]) == "bad":
+                        if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
                         else:
                             func.sendQuickreply(event)
 
 
                     elif mtext in oplist:
-                        if func2.is_in_or_not(uid , func2.get_today_date()[:5]) == "bad":
+                        if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
                         else:
                             func.sendQuickreply2(event)
@@ -102,7 +102,7 @@ def callback(request):
 
 
                     elif mtext in eslist:
-                        if func2.is_in_or_not(uid , func2.get_today_date()[:5]) == "bad":
+                        if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
                         else:
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請輸入金額(純數字)"))
@@ -114,7 +114,7 @@ def callback(request):
 
 
                     elif str.isdigit(mtext) == True:
-                        if func2.is_in_or_not(uid , func2.get_today_date()[:5]) == "bad":
+                        if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
                         else:
                             with open('registered_data.json', 'r', encoding="utf-8") as f:
@@ -128,7 +128,7 @@ def callback(request):
 
 
                     elif mtext == "正確":
-                        if func2.is_in_or_not(uid , func2.get_today_date()[:5]) == "bad":
+                        if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
                         else:
                             with open('registered_data.json', 'r', encoding="utf-8") as f:
@@ -226,7 +226,7 @@ def callback(request):
                         func.sendImage9(imgururl9, event)
 
                     elif mtext[-2:]=='花費' and len(mtext.split('花')[0]) < 5:
-                        if func2.is_in_or_not(uid , func2.get_today_date()[:5]) == "bad":
+                        if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
                         else:
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=check.check_date_spend_record(uid, mtext)))
@@ -241,14 +241,14 @@ def callback(request):
 
 
                     elif mtext[-2:]=='花費' and len(mtext.split('花')[0]) == 5:
-                        if func2.is_in_or_not(uid , func2.get_today_date()[:5]) == "bad":
+                        if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
                         else:
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=check.check_last_spend_data(uid, mtext)))
 
 
                     elif mtext[-2:]=='花費' and len(mtext.split('花')[0]) > 5:
-                        if func2.is_in_or_not(uid , func2.get_today_date()[:5]) == "bad":
+                        if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
                         else:
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(
@@ -256,14 +256,14 @@ def callback(request):
 
 
                     elif mtext == '查詢':
-                        if func2.is_in_or_not(uid , func2.get_today_date()[:5]) == "bad":
+                        if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
                         else:
                             func.sendQuickreply4(event)
 
 
                     elif mtext == '圖表':
-                        if func2.is_in_or_not(uid , func2.get_today_date()[:5]) == "bad":
+                        if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
                         else:
                             func.sendQuickreply3(event)
@@ -282,7 +282,7 @@ def callback(request):
 
 
                     elif mtext == "修改資料":
-                        if func2.is_in_or_not(uid , func2.get_today_date()[:5]) == "bad":
+                        if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
                         else:
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(
@@ -290,7 +290,7 @@ def callback(request):
 
 
                     elif mtext[:2] == "刪除":
-                        if func2.is_in_or_not(uid , func2.get_today_date()[:5]) == "bad":
+                        if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
                         else:
                             Sheet = GoogleSheets.open_by_key('19OiyE1Pqp44BTDD9cXtpebntvuQHmPYRTLDy_OJCi2c')
@@ -305,7 +305,7 @@ def callback(request):
 
 
                     elif mtext[:2] == "補記":
-                        if func2.is_in_or_not(uid , func2.get_today_date()[:5]) == "bad":
+                        if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
                         else:
                             Sheet = GoogleSheets.open_by_key('19OiyE1Pqp44BTDD9cXtpebntvuQHmPYRTLDy_OJCi2c')
@@ -317,7 +317,7 @@ def callback(request):
 
 
                     elif mtext == '這個月剩多少錢能花':
-                        if func2.is_in_or_not(uid , func2.get_today_date()[:5]) == "bad":
+                        if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
                         else:
                             r = func2.average(uid, func2.get_today_date()[:6])
@@ -543,7 +543,7 @@ def callback(request):
                         func.sendCarousel(event)
 
                     elif mtext == '消費分析':
-                        if func2.is_in_or_not(uid , func2.get_today_date()[:5]) == "bad":
+                        if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
                         else:
                             string = func2.get_today_date()

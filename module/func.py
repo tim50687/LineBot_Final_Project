@@ -240,19 +240,7 @@ def sendQuickreply3(event):  # 快速選單
             quick_reply=QuickReply(
                 items=[
                     QuickReplyButton(
-                        action=MessageAction(label="今年與往年同月每日平均金額比較圖", text="今年與往年同月每日平均金額比較圖")
-                    ),
-                    QuickReplyButton(
-                        action=MessageAction(label="今年與往年同月每日平均必要金額比較圖", text="今年與往年同月每日平均必要金額比較圖")
-                    ),
-                    QuickReplyButton(
-                        action=MessageAction(label="今年與往年同月每日平均不必要金額比較圖", text="今年與往年同月每日平均不必要金額比較圖")
-                    ),
-                    QuickReplyButton(
                         action=MessageAction(label="當月必要與不必要總花費占比", text="當月必要與不必要總花費占比")
-                    ),
-                    QuickReplyButton(
-                        action=MessageAction(label="當月必要與不必要總花費占比與去年比較之圓餅圖", text="當月必要與不必要總花費占比與去年比較之圓餅圖")
                     ),
                     QuickReplyButton(
                         action=MessageAction(label="當月各項總花費占比", text="當月各項總花費占比")
@@ -262,9 +250,6 @@ def sendQuickreply3(event):  # 快速選單
                     ),
                     QuickReplyButton(
                         action=MessageAction(label="當月各項必要性總花費", text="當月各項必要性總花費")
-                    ),
-                    QuickReplyButton(
-                        action=MessageAction(label="去年與今年當月各項必要性總花費", text="去年與今年當月各項必要性總花費")
                     )
                 ]
             )
