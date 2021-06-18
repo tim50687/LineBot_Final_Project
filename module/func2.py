@@ -149,6 +149,21 @@ def is_in_or_not(userid, types):
     return reply
 
 
+def is_in_or_not_cost(userid, types):
+    url = 'https://docs.google.com/spreadsheets/d/19OiyE1Pqp44BTDD9cXtpebntvuQHmPYRTLDy_OJCi2c/export?format=csv'  # 下載連結
+    webpage = urllib.request.urlopen(url)  # 開啟網頁
+    data = csv.DictReader(webpage.read().decode('utf-8-sig').splitlines())  # 讀取資料到data陣列中
+    a = [[i["userid"], i["項目"], i["必要嗎"], i["金額"], i["時間"]] for i in data]
+    reply = "bad"
+    i = 0
+    while i < len(apple):
+        if userid in a[i] and a[i][2][:4]+a[i][2][5:7] == types:
+            reply = "good"
+        i = i + 1
+    return reply
+
+
+
 
 # 輸入userid和月分(202106)得到他的該月總收入
 def month_income(userid, types):
@@ -246,3 +261,19 @@ def average(userid, types):
     return reply+u+v
 
 #print(average('U0a84d6de855ff90af62127932c7fde1f', "202106"))
+
+
+def find_row_money(userid, time):
+    url2 = 'https://docs.google.com/spreadsheets/d/14VUMIPWXfOynfr_Eixa8S2La7ksA-3i5zTWWTUd-8JA/export?format=csv'  # 下載連結
+    webpage = urllib.request.urlopen(url2)  # 開啟網頁
+    data2 = csv.DictReader(webpage.read().decode('utf-8-sig').splitlines())  # 讀取資料到data陣列中
+    apple = [[i["userid"], i["金額"], i["時間"]] for i in data2]
+    i = 0
+    b = []
+    reply = -2
+    while i < len(a):
+        if userid == a[i][0] and time == a[i][4][:4]+a[i][4][5:7]:
+            apple.append(str(i))
+            reply = b[0]
+        i = i + 1
+    return int(reply) + 2

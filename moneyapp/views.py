@@ -285,8 +285,7 @@ def callback(request):
                         if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
                         else:
-                            line_bot_api.reply_message(event.reply_token, TextSendMessage(
-                                text="輸入:刪除(或補記)項目 必要性 金額 年月日\nex : 刪除飲食 不必要 20 20210605"))
+                            func.sendQuickreply5(event)
 
 
                     elif mtext[:2] == "刪除":
@@ -314,6 +313,27 @@ def callback(request):
                             row = [uid, sp[0][2:], sp[1], sp[2], sp[3][:4] + "-" + sp[3][4:6] + "-" + sp[3][6:9]]
                             Sheets.append_row(row)
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="補記成功"))
+
+                    elif mtext == "修改預算":
+                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="輸入方式:改成金額(數字)\nex:改成5000"))
+
+                    elif mtext == "修改支出":
+                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="輸入:刪除(或補記)項目 必要性 金額 年月日\nex : 刪除飲食 不必要 20 20210605"))
+
+                    elif mtext[:2] == "改成":
+                        if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
+                            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
+                        else:
+                            index = func2.find_row_money(uid, func2.get_today_date()[:6])
+                            Sheet = GoogleSheets.open_by_key('14VUMIPWXfOynfr_Eixa8S2La7ksA-3i5zTWWTUd-8JA')
+                            Sheets = Sheet.sheet1
+                            sp = mtext.[2:]
+                            if index == 0:
+                                line_bot_api.reply_message(event.reply_token, TextSendMessage(text="沒有這筆資料 或是輸入錯誤"))
+                            else:
+                                index = "B" + str(index)
+                                Sheets.update(index, sp)
+                                line_bot_api.reply_message(event.reply_token, TextSendMessage(text="預算修改成功"))
 
 
                     elif mtext == '這個月剩多少錢能花':
@@ -545,42 +565,45 @@ def callback(request):
                     elif mtext == '消費分析':
                         if func2.is_in_or_not(uid , func2.get_today_date()[:6]) == "bad":
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="請先登錄每月預算\n登錄方式:@金額\nex:@8000"))
-                        else:
-                            string = func2.get_today_date()
-                            year = string[:4]  # 年
-                            month = string[4:6]  # 月
-                            eatcost = func2.item_cost(uid, "飲食", year + month)
-                            playcost = func2.item_cost(uid, "娛樂", year + month)
-                            trafcost = func2.item_cost(uid, "交通", year + month)
-                            thingcost = func2.item_cost(uid, "生活用品", year + month)
-                            monthcost = func2.month_cost(uid, year + month)
-                            ratio = round(eatcost / monthcost)
-                            ratio2 = round(playcost / monthcost)
-                            ratio3 = round(trafcost / monthcost)
-                            ratio4 = round(thingcost / monthcost)
-                            reply1 = ""
-                            reply2 = ""
-                            reply3 = ""
-                            reply4 = ""
-                            if ratio < 0.38:
-                                reply1 = "您在「飲食」的花費「低於」一般大學生"
+                            if func2.is_in_or_not_cost(uid, func2.get_today_date()[:6]) == "bad":
+                                line_bot_api.reply_message(event.reply_token, TextSendMessage(text="您還沒有紀錄支出呦"))
                             else:
-                                reply1 = "您在「飲食」的花費「高於」一般大學生"
-                            if ratio2 < 0.13:
-                                reply2 = "您在「娛樂」的花費「低於」一般大學生"
-                            else:
-                                reply2 = "您在「娛樂」的花費「高於」一般大學生"
-                            if ratio3 < 0.15:
-                                reply3 = "您在「交通」的花費「低於」一般大學生"
-                            else:
-                                reply3 = "您在「交通」方面的花費「高於」一般大學生"
-                            if ratio4 < 0.2:
-                                reply4 = "您在「生活用品」的花費「低於」一般\n大學生"
-                            else:
-                                reply4 = "您在「生活用品」的花費「高於」一般\n大學生"
+                                string = func2.get_today_date()
+                                year = string[:4]  # 年
+                                month = string[4:6]  # 月
+                                eatcost = func2.item_cost(uid, "飲食", year + month)
+                                playcost = func2.item_cost(uid, "娛樂", year + month)
+                                trafcost = func2.item_cost(uid, "交通", year + month)
+                                thingcost = func2.item_cost(uid, "生活用品", year + month)
+                                monthcost = func2.month_cost(uid, year + month)
+                                ratio = round(eatcost / monthcost)
+                                ratio2 = round(playcost / monthcost)
+                                ratio3 = round(trafcost / monthcost)
+                                ratio4 = round(thingcost / monthcost)
+                                reply1 = ""
+                                reply2 = ""
+                                reply3 = ""
+                                reply4 = ""
+                                if ratio < 0.38:
+                                    reply1 = "您在「飲食」的花費「低於」一般大學生"
+                                else:
+                                    reply1 = "您在「飲食」的花費「高於」一般大學生"
+                                if ratio2 < 0.13:
+                                    reply2 = "您在「娛樂」的花費「低於」一般大學生"
+                                else:
+                                    reply2 = "您在「娛樂」的花費「高於」一般大學生"
+                                if ratio3 < 0.15:
+                                    reply3 = "您在「交通」的花費「低於」一般大學生"
+                                else:
+                                    reply3 = "您在「交通」方面的花費「高於」一般大學生"
+                                if ratio4 < 0.2:
+                                    reply4 = "您在「生活用品」的花費「低於」一般\n大學生"
+                                else:
+                                    reply4 = "您在「生活用品」的花費「高於」一般\n大學生"
 
-                            line_bot_api.reply_message(event.reply_token, TextSendMessage(
-                                text=reply1 + "\n" + reply2 + "\n" + reply3 + "\n" + reply4))
+                                line_bot_api.reply_message(event.reply_token, TextSendMessage(
+                                    text=reply1 + "\n" + reply2 + "\n" + reply3 + "\n" + reply4))
+
 
 
 

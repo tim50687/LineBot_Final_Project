@@ -83,7 +83,7 @@ def check_spend_data_from_date(userid, date):
     data = {}
     order = 0
     with requests.Session() as s:
-        url = 'https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv'
+        url = 'https://docs.google.com/spreadsheets/d/19OiyE1Pqp44BTDD9cXtpebntvuQHmPYRTLDy_OJCi2c/export?format=csv'
         download = s.get(url)
         decoded_content = download.content.decode('utf-8')
         cr = csv.reader(decoded_content.splitlines(), delimiter=',')
@@ -131,7 +131,7 @@ def check_last_number_spend_data(userid, number):
     data = {}
     order = 0
     with requests.Session() as s:
-        url = 'https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv'
+        url = 'https://docs.google.com/spreadsheets/d/19OiyE1Pqp44BTDD9cXtpebntvuQHmPYRTLDy_OJCi2c/export?format=csv'
         download = s.get(url)
         decoded_content = download.content.decode('utf-8')
         cr = csv.reader(decoded_content.splitlines(), delimiter=',')
@@ -168,7 +168,7 @@ def check_last_number_spend_data(userid, number):
 def check_how_many_records_in_spend_data(userid):
     order = 0
     with requests.Session() as s:
-        url = 'https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv'
+        url = 'https://docs.google.com/spreadsheets/d/19OiyE1Pqp44BTDD9cXtpebntvuQHmPYRTLDy_OJCi2c/export?format=csv'
         download = s.get(url)
         decoded_content = download.content.decode('utf-8')
         cr = csv.reader(decoded_content.splitlines(), delimiter=',')
@@ -187,7 +187,7 @@ def check_number_records_in_spend_data(userid, text):
     data = {}
     order = 0
     with requests.Session() as s:
-        url = 'https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv'
+        url = 'https://docs.google.com/spreadsheets/d/19OiyE1Pqp44BTDD9cXtpebntvuQHmPYRTLDy_OJCi2c/export?format=csv'
         download = s.get(url)
         decoded_content = download.content.decode('utf-8')
         cr = csv.reader(decoded_content.splitlines(), delimiter=',')
@@ -234,7 +234,7 @@ def check_last_item_from_spend_data(userid, number, item):
     data = {}
     order = 0
     with requests.Session() as s:
-        url = 'https://docs.google.com/spreadsheets/d/1-ierB_MQoeLlcOvHocc3NWeJCp2p8FQYzt5TVsMFfvY/export?format=csv'
+        url = 'https://docs.google.com/spreadsheets/d/19OiyE1Pqp44BTDD9cXtpebntvuQHmPYRTLDy_OJCi2c/export?format=csv'
         download = s.get(url)
         decoded_content = download.content.decode('utf-8')
         cr = csv.reader(decoded_content.splitlines(), delimiter=',')
