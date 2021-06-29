@@ -1127,7 +1127,7 @@ def spend_unnecessary_sum_of_same_month_day_average(userid, url):
         dict3[key3] = float(value3) / float(dict1[key3])
     return dict3
 
-#去年與今年同月每日總花費比較折線圖(
+#去年與今年同月每日總花費比較折線圖
 def current_previous_same_month_day_Line_Chart(userid, url):
     plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']
     plt.rcParams['axes.unicode_minus'] = False
@@ -1191,7 +1191,8 @@ def current_previous_same_month_day_Line_Chart(userid, url):
     plt.ylabel('金額', fontdict={ 'color': 'k', 'size': 12})
     ax.set_title('今年與往年同月每日平均金額比較圖', fontdict={ 'color': 'k', 'size': 15}, pad=10)
     plt.grid(b=True, axis='y')
-    plt.savefig('send1.png')
+    filename = userid + "1.png"
+    plt.savefig(filename)
 #去年與今年同月每日必要總花費比較折線圖
 def current_previous_necessary_same_month_day_Line_Chart(userid, url):
     plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']
@@ -1256,7 +1257,8 @@ def current_previous_necessary_same_month_day_Line_Chart(userid, url):
     plt.ylabel('金額', fontdict={'color': 'k', 'size': 12})
     ax.set_title('今年與往年同月每日平均必要金額比較圖', fontdict={ 'color': 'k', 'size': 15}, pad=10)
     plt.grid(b=True, axis='y')
-    plt.savefig('send2.png')
+    filename = userid + "2.png"
+    plt.savefig(filename)
 #去年與今年同月每日必要總花費比較折線圖
 def current_previous_unnecessary_same_month_day_Line_Chart(userid, url):
     plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']
@@ -1321,7 +1323,8 @@ def current_previous_unnecessary_same_month_day_Line_Chart(userid, url):
     plt.ylabel('金額', fontdict={ 'color': 'k', 'size': 12})
     ax.set_title('今年與往年同月每日平均不必要金額比較圖', fontdict={ 'color': 'k', 'size': 15}, pad=10)
     plt.grid(b=True, axis='y')
-    plt.savefig('send3.png')
+    filename = userid + "3.png"
+    plt.savefig(filename)
 #當月必要與不必要總花費占比圓餅圖
 def current_month_necessary_and_unnecessary_Pie_Chart(userid, url):
     plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']
@@ -1349,11 +1352,12 @@ def current_month_necessary_and_unnecessary_Pie_Chart(userid, url):
         return "{:.1f}%\n({:d} 元)".format(pct, absolute)
     necessary_unnecessary_list.append(necessary_sum)
     necessary_unnecessary_list.append(unnecessary_sum)
-    ax.pie(necessary_unnecessary_list, textprops={ 'color': 'k', 'size': 18}, autopct=lambda pct: func(pct, necessary_unnecessary_list),startangle=90,colors=['#4169E1','#800000'])
+    ax.pie(necessary_unnecessary_list, textprops={ 'color': 'k', 'size': 18}, autopct=lambda pct: func(pct, necessary_unnecessary_list),startangle=90,colors=['#87e8e8','#f5b5c6'])
     ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     ax.legend( necessarity_list,title="必要性", fontsize=10,loc="center left",bbox_to_anchor=(-0.1,0, 0, 1))
     ax.set_title("當月必要與不必要總花費占比", fontsize=15)
-    plt.savefig('send4.png')
+    filename = userid + "4.png"
+    plt.savefig(filename)
 #當月必要與不必要總花費占比與去年比較之圓餅圖
 def current_month_necessary_and_unnecessary_double_Pie_Chart(userid, url):
     plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']
@@ -1392,22 +1396,23 @@ def current_month_necessary_and_unnecessary_double_Pie_Chart(userid, url):
         return "{:.1f}%\n({:d} 元)".format(pct, absolute)
     necessary_unnecessary_list1.append(necessary_sum1)
     necessary_unnecessary_list1.append(unnecessary_sum1)
-    ax[0].pie(necessary_unnecessary_list1, textprops={ 'color': 'k', 'size': 15},autopct=lambda pct: func(necessary_sum1, unnecessary_sum1, pct,necessary_unnecessary_list1), startangle=90,colors=['#4169E1', '#800000'])
+    ax[0].pie(necessary_unnecessary_list1, textprops={ 'color': 'k', 'size': 15},autopct=lambda pct: func(necessary_sum1, unnecessary_sum1, pct,necessary_unnecessary_list1), startangle=90,colors=['#87e8e8','#f5b5c6'])
     ax[0].axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     ax[0].legend(necessarity_list, title="必要性", fontsize=11, loc="center left",bbox_to_anchor=(-0.3, -0.5, 0, 1))
     ax[0].set_title("去年當月必要與不必要總花費占比", fontsize=12,pad=-10)
     necessary_unnecessary_list2.append(necessary_sum2)
     necessary_unnecessary_list2.append(unnecessary_sum2)
-    ax[1].pie(necessary_unnecessary_list2, textprops={ 'color': 'k', 'size': 15}, autopct=lambda pct: func(necessary_sum2,unnecessary_sum2,pct, necessary_unnecessary_list2),startangle=90,colors=['#4169E1','#800000'])
+    ax[1].pie(necessary_unnecessary_list2, textprops={ 'color': 'k', 'size': 15}, autopct=lambda pct: func(necessary_sum2,unnecessary_sum2,pct, necessary_unnecessary_list2),startangle=90,colors=['#87e8e8','#f5b5c6'])
     ax[1].axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     #ax_dict["this year"].legend( necessarity_list,title="必要性", fontsize=10,loc="center left",bbox_to_anchor=(-0.1,0, 0, 1))
     ax[1].set_title("今年當月必要與不必要總花費占比", fontsize=12,pad=-10)
 
     #identify_axes(ax_dict)
-    plt.savefig('send5.png')
+    filename = userid + "5.png"
+    plt.savefig(filename)
 #當月各項總花費占比圓餅圖
 def current_month_item_Pie_Chart(userid, url):
-    plt.rcParams['font.sans-serif'] = ['Microsoft JhengHei']
+    plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']
     plt.rcParams['axes.unicode_minus'] = False
     fig, ax = plt.subplots()
     day_list = []
@@ -1454,11 +1459,12 @@ def current_month_item_Pie_Chart(userid, url):
     item_list.append(traffic_sum)
     for i in item_list:
         item_list_d.append(str(i)+'元')
-    ax.pie(item_list, textprops={ 'color': 'k', 'size': 15}, autopct='%1.1f%%',startangle=90,colors=['#FF8C00','#6495ED','#DC143C','#48D1CC', '#BC8F8F'], labels = item_list_d)
+    ax.pie(item_list, textprops={ 'color': 'k', 'size': 15}, autopct='%1.1f%%',startangle=90,colors=['#FF8C00','#6495ED','#f26682','#48D1CC', '#BC8F8F'], labels = item_list_d)
     ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-    ax.legend(item_name_list,title="項目", fontsize=10,loc="center left",bbox_to_anchor=(-0.15,-0.4, 0, 1))
-    ax.set_title("當月各項總花費占比", fontsize=15,pad=15)
-    plt.savefig('send6.png')
+    ax.legend(item_name_list, title="項目", fontsize=10,  loc="center left",bbox_to_anchor=(-0.15,-0.4, 0, 1))
+    ax.set_title("當月各項總花費占比", fontsize=15, pad=15)
+    filename = userid + "6.png"
+    plt.savefig(filename)
 #當月各項總花費占比與去年比較之圓餅圖
 def current_month_item_double_Pie_Chart(userid, url):
     plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']
@@ -1537,7 +1543,8 @@ def current_month_item_double_Pie_Chart(userid, url):
     #ax.legend(item_name_list, title="項目", fontsize=10, loc="center left", bbox_to_anchor=(-0.15, -0.4, 0, 1))
     ax[1].set_title("今年當月各項總花費占比", fontsize=15, pad=-10)
     #identify_axes(ax_dict)
-    plt.savefig('send7.png')
+    filename = userid + "7.png"
+    plt.savefig(filename)
 #當月各項必要性總花費長條圖
 def current_month_necessary_and_unnecessary_item_Bar_Chart(userid, url):
     plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']
@@ -1645,7 +1652,8 @@ def current_month_necessary_and_unnecessary_item_Bar_Chart(userid, url):
     plt.xticks(index + .6 / 2, item_name_list)
     plt.legend()
     plt.grid(b=True, axis='y')
-    plt.savefig('send8.png')
+    filename = userid + "8.png"
+    plt.savefig(filename)
 #去年與今年當月各項必要性總花費長條圖
 def current_month_necessary_and_unnecessary_item_comparison_Bar_Chart(userid, url):
     plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']
@@ -1835,7 +1843,8 @@ def current_month_necessary_and_unnecessary_item_comparison_Bar_Chart(userid, ur
     plt.xticks(index + .6 / 2, item_name_list,fontsize=15)
     plt.legend(fontsize=13)
     plt.grid(b=True, axis='y')
-    plt.savefig('send9.png')
+    filename = userid + "9.png"
+    plt.savefig(filename)
 
 #if __name__ == '__main__':
         #print(get_spend_csv())

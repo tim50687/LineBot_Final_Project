@@ -21,8 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-097ht#4s1zhe5i5bo#-xc^y52h_tp&vqvzu@lfp+srkn3rg14^'
-LINE_CHANNEL_ACCESS_TOKEN = 'qcqxDK5+eZUgMkFnGpAXKnXA4IbpECBO2UST11a331RnekdcKNJOVqvRVVZek9Rmtfpa0CmFuw7uYFS1h5wv80krU2GtQD6B23k7yyoljqQS10xf8xO4r1tgBzGBPyrsWIa88BKiDAubQH27tPSAsAdB04t89/1O/w1cDnyilFU='
-LINE_CHANNEL_SECRET  = 'c5fde54065f6ca1bd2a308464828760a'
+LINE_CHANNEL_ACCESS_TOKEN = 'YynPGAjDKT11iqT0VcLKU1P4GmoJbx2jx5aKR85V8Us7D0YSfAY8LPbzryDOrWzVCEczOmSbouVv2AVF6qKcAB8amj+g+8c/JEUx8oyIAfVvv8RJCtaeidEn3T5KZz1cLpluRwnrU7cSBDw63KlAjQdB04t89/1O/w1cDnyilFU='
+LINE_CHANNEL_SECRET  = '5ed287747a11d4f9bf58eefe355f73ca'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
